@@ -68,10 +68,60 @@ class DailyPredictionAutomator:
             self.create_daily_summary(result['predictions'])
             
             print(f"\n✅ Predictions completed for {len(result['predictions'])} stocks")
-            return True
+            return True, result['predictions']
         else:
             print("\n❌ No predictions generated")
-            return False
+            return False, []
+    
+    def run_trading_evaluation(self):
+        """Evaluate yesterday's predictions if available"""
+        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
+        
+        print(f"\n📊 Evaluating Trading Performance from {yesterday}")
+        print("=" * 70)
+        
+        # Check if we have yesterday's predictions to evaluate
+        predictions_file = self.predictions_dir / "json" / f"predictions_{yesterday}.json"
+        
+        if predictions_file.exists():
+            # Initialize simulator for evaluation
+            simulator = RealTradingSimulator()
+            
+            # Run evaluation
+            eval_result = simulator.evaluate_previous_predictions()
+            
+            if eval_result['evaluated']:
+                print(f"✅ Evaluated {len(eval_result['evaluated'])} predictions")
+                return True, eval_result
+            else:
+                print("⚠️  No evaluations could be performed")
+                return False, {}
+        else:
+            print(f"⚠️  No predictions from {yesterday} found - skipping evaluation")
+            return False, {}
+    
+    def run_complete_daily_automation(self):
+        """Run both predictions and trading evaluation"""
+        print("🤖 COMPLETE DAILY AUTOMATION")
+        print("=" * 50)
+        
+        results = {
+            'predictions': None,
+            'evaluation': None,
+            'date': self.today
+        }
+        
+        # Step 1: Evaluate yesterday's predictions (trading performance)
+        eval_success, eval_data = self.run_trading_evaluation()
+        if eval_success:
+            results['evaluation'] = eval_data
+        
+        # Step 2: Make today's predictions for tomorrow
+        pred_success, pred_data = self.run_daily_predictions()
+        if pred_success:
+            results['predictions'] = pred_data
+        
+        return results
     
     def create_csv_summary(self, predictions):
         """Create CSV file with predictions"""
@@ -173,11 +223,11 @@ class DailyPredictionAutomator:
         try:
             os.chdir(self.base_dir)
             
-            # Add all prediction files
-            subprocess.run(['git', 'add', 'daily_predictions/'], check=True)
+            # Add all prediction files and evaluations
+            subprocess.run(['git', 'add', 'daily_predictions/', 'evaluations/'], check=True)
             
-            # Commit with date
-            commit_msg = f"Daily predictions for {self.tomorrow} (generated {self.today})"
+            # Commit with comprehensive message
+            commit_msg = f"Daily automation {self.today}: predictions for {self.tomorrow} + evaluation of previous trades"
             subprocess.run(['git', 'commit', '-m', commit_msg], check=True)
             
             # Push to remote
@@ -195,25 +245,32 @@ class DailyPredictionAutomator:
 
 def main():
     """Main function to run daily automation"""
-    print("🤖 DAILY PREDICTIONS AUTOMATION")
-    print("=" * 50)
+    print("🤖 DAILY PREDICTIONS & TRADING AUTOMATION")
+    print("=" * 60)
     
     automator = DailyPredictionAutomator()
     
-    # Run predictions
-    success = automator.run_daily_predictions()
+    # Run complete automation (predictions + evaluation)
+    results = automator.run_complete_daily_automation()
     
-    if success:
+    # Commit to Git if we have any results
+    has_results = results['predictions'] or results['evaluation']
+    
+    if has_results:
         # Commit to Git
         git_success = automator.commit_to_git()
         
         if git_success:
             print(f"\n🎉 Daily automation completed successfully!")
-            print(f"📅 Predictions for {automator.tomorrow} are now in Git")
+            if results['predictions']:
+                print(f"� Generated predictions for {len(results['predictions'])} stocks")
+            if results['evaluation']:
+                print(f"📊 Evaluated {len(results['evaluation']['evaluated'])} previous predictions")
+            print(f"📅 All results committed to Git")
         else:
-            print(f"\n⚠️  Predictions generated but Git commit failed")
+            print(f"\n⚠️  Automation completed but Git commit failed")
     else:
-        print(f"\n❌ Daily automation failed")
+        print(f"\n❌ No results generated - automation failed")
 
 if __name__ == "__main__":
     main()

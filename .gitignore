@@ -46,9 +46,21 @@ data/*.csv
 data/*.pkl
 !data/.gitkeep
 
-# Model files (large trained models)
-models/*.h5
-models/*.pkl
+# Model files - Include essential models for GitHub Actions
+# Exclude large individual model files but keep ensemble models
+models/*_lstm_model.h5
+models/*_baseline_model.h5
+models/*_mslstm_model.h5
+models/*_mslstma_model.h5
+
+# Keep ensemble models and scalers (needed for automation)
+!models/*_ensemble_paper.pkl
+!models/*_ensemble_paper_scaler.pkl
+!models/*_ensemble_paper_base/
+!models/*_paper.h5
+!models/*_paper.pkl
+
+# Keep essential model directories
 !models/.gitkeep
 
 # Results and logs
