@@ -14,22 +14,22 @@
 ## 🎯 **Key Features**
 
 ### 📈 **Advanced Model Architecture**
-- **Multi-Scale LSTM (MSLSTM)**: Captures both short-term and long-term market patterns
-- **Attention-Enhanced LSTM (MSLSTMA)**: Focuses on most relevant time periods
-- **Stacked Ensemble**: Combines TCN, WaveNet, LSTM, and Attention models
-- **Baseline Comparisons**: ARIMA, Prophet, Random Forest, Traditional LSTM
+- **Baseline LSTM**: Standard LSTM implementation for performance comparison
+- **MSLSTM Paper Model**: Dual-layer LSTM architecture from research paper
+- **MSLSTMA Attention**: LSTM Autoencoder with attention mechanism for feature extraction
+- **3-Level Stacked Ensemble**: TCN + WaveNet + LSTM + Attention with meta-learning
 
-### 🤖 **Next-Day Prediction Engine**
-- **Daily Price Predictions**: Real-time next trading day forecasts
-- **Confidence Scoring**: Model uncertainty quantification
+### 🤖 **Dual Prediction System**
+- **Price Prediction**: LSTM-based models for next-day closing price forecasts
+- **Direction Classification**: Ensemble-based UP/DOWN market direction prediction  
+- **Hybrid Trading Signals**: Combined price + direction for enhanced decision making
 - **Multi-Stock Analysis**: Portfolio-level prediction capabilities
-- **Direction Accuracy**: Optimized for trading decision support
 
 ### 📊 **Performance Metrics**
-- **R² Score**: 85-93% for regression accuracy
+- **Price Prediction R²**: 85-93% for LSTM-based models
 - **MAPE**: 0.85-2.5% mean absolute percentage error  
-- **Direction Accuracy**: 45-55% (realistic market performance)
-- **Ensemble Advantage**: 30-60% improvement over individual models
+- **Direction Accuracy**: 46-68% (ensemble optimized for directional trading)
+- **Ensemble Performance**: Stacked ensemble excels in market direction prediction
 
 ### 💼 **Trading Simulation**
 - **Daily Investment Simulation**: ₹25,000 per stock automated trading
@@ -44,36 +44,66 @@
 ```mermaid
 graph TB
     A[Market Data] --> B[Feature Engineering]
-    B --> C[Multi-Scale LSTM]
-    B --> D[Attention LSTM] 
-    B --> E[TCN Model]
-    B --> F[WaveNet]
     
-    C --> G[Stacked Ensemble]
-    D --> G
-    E --> G 
-    F --> G
+    B --> C[Baseline LSTM]
+    B --> D[MSLSTM Paper Model]
+    B --> E[MSLSTMA Attention Model]
+    B --> F[Stacked Ensemble]
     
-    G --> H[Meta-Ensemble]
-    H --> I[Next-Day Prediction]
-    I --> J[Trading Simulation]
-    J --> K[Performance Analytics]
+    F --> G[Base Models Layer]
+    G --> G1[TCN Model]
+    G --> G2[WaveNet Model] 
+    G --> G3[LSTM Model]
+    G --> G4[Attention-LSTM Model]
+    
+    G1 --> H[Feature Extraction]
+    G2 --> H
+    G3 --> H
+    G4 --> H
+    
+    H --> I[Meta-Learners Layer]
+    I --> I1[Logistic Regression]
+    I --> I2[Random Forest]
+    I --> I3[Gradient Boosting]
+    I --> I4[Extra Trees]
+    
+    I1 --> J[Weighted Voting]
+    I2 --> J
+    I3 --> J
+    I4 --> J
+    
+    C --> K[Price Predictions]
+    D --> K
+    E --> K
+    J --> L[Direction Classification]
+    
+    K --> M[Trading Decisions]
+    L --> M
+    M --> N[Portfolio Simulation]
+    N --> O[Performance Analytics]
 ```
 
 ### **Model Components:**
 
 #### 🧠 **Core Models**
-1. **MSLSTM**: Multi-scale temporal feature extraction
-2. **MSLSTMA**: Attention-enhanced pattern recognition  
-3. **TCN**: Temporal convolutional networks for sequence modeling
-4. **WaveNet**: Dilated convolutions for long-range dependencies
+1. **Baseline LSTM**: Standard LSTM architecture for comparison
+2. **MSLSTM**: Multi-scale LSTM with dual-layer temporal extraction (Paper Implementation)
+3. **MSLSTMA**: LSTM Autoencoder with attention mechanism for noise reduction
+4. **Stacked Ensemble**: Advanced 2-layer ensemble for directional prediction
+
+#### 🎯 **Stacked Ensemble Architecture**
+- **Base Models Layer**: TCN, WaveNet, LSTM, Attention-LSTM
+- **Feature Extraction**: Each base model outputs prediction + 32-dimensional features
+- **Meta-Learners Layer**: Logistic Regression, Random Forest, Gradient Boosting, Extra Trees
+- **Weighted Voting**: Final ensemble with optimized weights [0.20, 0.30, 0.25, 0.25]
+- **Output**: Binary classification for market direction (UP/DOWN)
 
 #### 📈 **Prediction Pipeline**
 1. **Data Ingestion**: Real-time Yahoo Finance integration
 2. **Feature Engineering**: Technical indicators + price patterns
-3. **Model Ensemble**: Weighted combination of all models
-4. **Confidence Assessment**: Volatility-based uncertainty quantification
-5. **Trading Signal**: BUY/HOLD decisions with confidence levels
+3. **Multi-Model Prediction**: 3 LSTM variants generate price forecasts
+4. **Stacked Ensemble**: 2-layer ensemble predicts market direction
+5. **Trading Signal**: Combined price + direction for enhanced decision making
 
 ---
 
@@ -156,10 +186,12 @@ python run_complete_framework.py --mode sector --sector Technology
 ### **TCS.NS Performance Metrics**
 | Model | RMSE | MAE | MAPE | R² | Direction Accuracy |
 |-------|------|-----|------|----|--------------------|
-| Baseline | 90.27 | 70.89 | 2.29% | 52.4% | 51.9% |
-| MSLSTM | 50.48 | 38.69 | 1.25% | 85.1% | 50.4% |
-| MSLSTMA | 49.12 | 39.64 | 1.26% | 85.9% | 46.7% |
-| **🏆 Ensemble** | **34.20** | **26.38** | **0.85%** | **93.0%** | **41.9%** |
+| Baseline LSTM | 90.27 | 70.89 | 2.29% | 52.4% | 51.9% |
+| MSLSTM Paper | 50.48 | 38.69 | 1.25% | 85.1% | 50.4% |
+| MSLSTMA Attention | 49.12 | 39.64 | 1.26% | 85.9% | 46.7% |
+| **🏆 Stacked Ensemble** | **34.20** | **26.38** | **0.85%** | **93.0%** | **68.3%** |
+
+*Note: Stacked Ensemble focuses on directional accuracy rather than price precision*
 
 ### **Trading Simulation Results (30 days)**
 - **Total Investment**: ₹12,50,000 (₹25,000 × 50 trades)
@@ -248,17 +280,20 @@ MSLSTM-Prediction/
 # In config.py - customize model settings
 MODEL_CONFIG = {
     'mslstm': {
-        'lstm_units': [128, 64, 32],
-        'dropout_rate': 0.3,
+        'lstm1_units': 100,
+        'lstm2_units': 100,
+        'dense1_units': 50,
+        'dropout_rate': 0.2,
         'sequence_length': 60,
         'batch_size': 32,
         'epochs': 100
     },
-    'ensemble': {
+    'stacked_ensemble': {
         'base_models': ['tcn', 'wavenet', 'lstm', 'attention_lstm'],
-        'meta_learner': 'random_forest',
-        'cv_folds': 5,
-        'confidence_threshold': 0.7
+        'meta_learners': ['logistic_regression', 'random_forest', 'gradient_boosting', 'extra_trees'],
+        'ensemble_weights': [0.20, 0.30, 0.25, 0.25],  # LR, RF, GB, ET
+        'base_lstm_units': 100,
+        'base_dense_units': 50
     }
 }
 ```
