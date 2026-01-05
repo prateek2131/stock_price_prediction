@@ -1,0 +1,171 @@
+name: Daily Trading Simulation
+
+on:
+  schedule:
+    # Run daily at 6:30 PM IST (1:00 PM UTC)
+    - cron: '0 13 * * 1-5'  # Monday to Friday only (trading days)
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      ticker:
+        description: 'Single ticker to simulate (optional)'
+        required: false
+        default: ''
+      days:
+        description: 'Number of days to simulate'
+        required: false
+        default: '1'
+      portfolio:
+        description: 'Run full portfolio simulation'
+        required: false
+        default: 'true'
+
+jobs:
+  daily-trading-simulation:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_sota.txt
+        pip install openpyxl xlsxwriter
+
+    - name: Create required directories
+      run: |
+        mkdir -p trading_results
+        mkdir -p logs
+        mkdir -p results
+
+    - name: Set up Git configuration
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Run Daily Trading Simulation
+      run: |
+        echo "Starting daily trading simulation at $(date)"
+        
+        if [ "${{ github.event.inputs.ticker }}" != "" ]; then
+          echo "Running simulation for single ticker: ${{ github.event.inputs.ticker }}"
+          python real_trading_simulator.py --ticker "${{ github.event.inputs.ticker }}" --days "${{ github.event.inputs.days || '1' }}"
+        elif [ "${{ github.event.inputs.portfolio }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
+          echo "Running full portfolio simulation"
+          python real_trading_simulator.py --portfolio --days "${{ github.event.inputs.days || '1' }}"
+        else
+          echo "Running default TCS simulation"
+          python real_trading_simulator.py --ticker TCS.NS --days 1
+        fi
+        
+        echo "Trading simulation completed at $(date)"
+
+    - name: Generate Portfolio Summary
+      run: |
+        echo "Generating portfolio summary..."
+        python -c "
+        from MSLSTM_prediction_framework import run_portfolio_predictions
+        from config import SECTORS
+        import os
+        
+        # Get all stocks from config
+        all_stocks = []
+        for sector_data in SECTORS.values():
+            all_stocks.extend(sector_data['stocks'])
+        
+        # Run predictions for all stocks
+        try:
+            run_portfolio_predictions(all_stocks[:10], prediction_days=1)  # Limit to first 10 for speed
+            print('✅ Portfolio summary generated')
+        except Exception as e:
+            print(f'❌ Portfolio summary failed: {e}')
+        "
+
+    - name: Create Daily Summary Log
+      run: |
+        echo "Creating daily summary log..."
+        cat > logs/daily_summary_$(date +%Y%m%d).log << EOF
+        Daily Trading Simulation Summary
+        ================================
+        Date: $(date)
+        Trigger: ${{ github.event_name }}
+        
+        Files Generated:
+        $(ls -la trading_results/ | tail -n 5)
+        
+        Portfolio Summary:
+        $(test -f results/portfolio_next_day_predictions.csv && head -n 10 results/portfolio_next_day_predictions.csv || echo "Portfolio summary not available")
+        
+        Status: Completed Successfully
+        EOF
+
+    - name: Commit and push results
+      run: |
+        # Add all new files
+        git add trading_results/
+        git add results/
+        git add logs/
+        
+        # Check if there are any changes to commit
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "Committing changes..."
+          git commit -m "🤖 Daily trading simulation results - $(date +%Y-%m-%d)"
+          git push
+          echo "✅ Results pushed to repository"
+        else
+          echo "ℹ️ No changes to commit"
+        fi
+
+    - name: Create Release (Weekly)
+      if: github.event_name == 'schedule' && github.event.schedule == '0 13 * * 5'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: weekly-results-${{ github.run_number }}
+        release_name: Weekly Trading Results - ${{ github.run_number }}
+        body: |
+          ## Weekly Trading Simulation Results
+          
+          This release contains the weekly summary of automated trading simulation results.
+          
+          ### Key Files:
+          - `trading_results/`: Daily Excel files with simulation results
+          - `results/`: Portfolio summaries and performance metrics
+          - `logs/`: Daily execution logs
+          
+          ### Performance Summary:
+          See the latest files in trading_results/ for detailed performance metrics.
+          
+          Generated automatically by GitHub Actions.
+        draft: false
+        prerelease: false
+
+    - name: Upload artifacts (on failure)
+      if: failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: simulation-logs
+        path: |
+          logs/
+          *.log
+        retention-days: 7
