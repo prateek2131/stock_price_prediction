@@ -176,7 +176,7 @@ jobs:
           git commit -m "🤖 Multi-Model Stock Predictions - $COMMIT_DATE
 
 📅 Date: $COMMIT_DATE at $COMMIT_TIME UTC
-📊 Predictions: $PREDICTION_COUNT total (40 stocks × $MODEL_COUNT models)
+📊 Predictions: $PREDICTION_COUNT total (40 stocks × $MODEL_COUNT models)  
 🎯 Models: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble
 💰 Features: Individual model P/L tracking & ROI analysis
 📈 Target: Next trading day forecasts
@@ -199,7 +199,7 @@ $(git diff --name-only HEAD~1 HEAD 2>/dev/null | head -10 | sed 's/^/- /' || git
         fi
 
     - name: Create Weekly Release (Fridays or Manual)
-      if: (github.event_name == 'schedule' && contains(github.event.schedule, '* * 5')) || github.event_name == 'workflow_dispatch'
+      if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && contains(github.event.schedule, '* * 5'))
       uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
