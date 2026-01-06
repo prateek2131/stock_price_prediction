@@ -129,84 +129,31 @@ jobs:
         COMMIT_DATE=$(date +%Y-%m-%d)
         COMMIT_TIME=$(date +%H:%M:%S)
         
-        CHANGED_FILES=$(git status --porcelain | wc -l)
-        
-        if [ "$CHANGED_FILES" -gt 0 ]; then
-          echo "📊 Committing $CHANGED_FILES changed files..."
-          
-          git commit -m "🤖 Multi-Model Stock Predictions - $COMMIT_DATE
-
-📅 Date: $COMMIT_DATE at $COMMIT_TIME UTC
-🎯 Models: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble
-💰 Features: Individual model P/L tracking & ROI analysis
-📈 Target: Next trading day forecasts
-🔄 Automation: GitHub Actions
-
-Files updated: Multi-model predictions, evaluations, and summaries"
-
-          if git push origin main; then
-            echo "✅ All results successfully stored in GitHub!"
-            echo "🔗 View results at: https://github.com/${{ github.repository }}"
-          else
-            echo "❌ Failed to push results to GitHub"
-            exit 1
-          fi
+        if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then
+          echo "📊 Committing prediction results..."
+          git commit -m "Daily predictions $COMMIT_DATE"
+          git push origin main
+          echo "✅ Results saved to GitHub"
         else
           echo "ℹ️ No new results to commit"
         fi
 
     - name: Create Weekly Release
-      if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && contains(github.event.schedule, '5'))
+      if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
       uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: weekly-predictions-${{ github.run_number }}
-        name: 📊 Multi-Model Stock Predictions - Week ${{ github.run_number }}
+        name: Stock Predictions - Week ${{ github.run_number }}
         body: |
-          ## 📈 Weekly Multi-Model Stock Market Predictions Summary
+          Multi-model stock predictions for 39 Indian stocks.
           
-          **Coverage**: 40 Indian stocks across 8 sectors  
-          **Models**: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble  
-          **Features**: Individual model P/L tracking, ROI analysis, direction accuracy
+          Models: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble
+          Features: Individual P/L tracking and ROI analysis
           
-          ### 🤖 Enhanced Multi-Model System:
-          - **Baseline LSTM**: Traditional LSTM model with basic features
-          - **MSLSTM**: Multi-Scale LSTM with enhanced memory states
-          - **MSLSTMA**: MSLSTM with Attention mechanism for better focus
-          - **Stacked Ensemble**: Combined predictions from all models
-          
-          ### 📁 Repository Contents:
-          - `daily_predictions/csv/`: Multi-model prediction data (all 4 models per stock)
-          - `daily_predictions/summary/`: Human-readable reports with P/L analysis
-          - `evaluations/`: Model performance tracking with profit/loss metrics
-          - `predictions/`: Raw model predictions in JSON format  
-          - `logs/`: Execution logs and system information
-          
-          ### 🎯 Key Features:
-          - ✅ Individual predictions from all 4 models per stock
-          - ✅ Profit/Loss tracking for each model separately
-          - ✅ ROI percentage calculation per model
-          - ✅ Direction accuracy comparison across models
-          - ✅ Best/worst performing model identification
-          - ✅ Automated daily performance evaluation
-          
-          ### 📊 Usage:
-          - **Quick Overview**: Check `daily_predictions/csv/ensemble_summary_YYYY-MM-DD.csv`
-          - **Detailed Analysis**: See `daily_predictions/summary/summary_YYYY-MM-DD.md`
-          - **Model Comparison**: View `daily_predictions/csv/predictions_YYYY-MM-DD.csv`
-          - **P/L Performance**: Check `evaluations/evaluation_YYYY-MM-DD.json`
-          
-          ### 💰 Performance Metrics:
-          Each model is evaluated on:
-          - **Profit/Loss**: Actual trading simulation results (₹10,000 per trade)
-          - **ROI**: Return on Investment percentage
-          - **Direction Accuracy**: Percentage of correct up/down predictions
-          - **Price Error**: Average prediction error percentage
-          
-          *Generated automatically by GitHub Actions - Multi-model predictions updated daily*
+          Check daily_predictions/ folder for results.
         draft: false
-        prerelease: false
 
     - name: Upload artifacts (on failure)
       if: failure()
