@@ -91,12 +91,18 @@ jobs:
 
     - name: Commit and push results
       run: |
-        # Add all new files
-        git add daily_predictions/
-        git add predictions/
-        git add evaluations/
-        git add results/
-        git add logs/
+        # Add all new files (only if directories exist)
+        for dir in daily_predictions predictions evaluations results logs; do
+          if [ -d "$dir" ]; then
+            echo "Adding $dir/ to git..."
+            git add "$dir/"
+          else
+            echo "Directory $dir/ does not exist, skipping..."
+          fi
+        done
+        
+        # Also add any individual files that might have been created
+        git add *.csv *.json *.log *.xlsx 2>/dev/null || true
         
         # Check if there are any changes to commit
         if [ -n "$(git status --porcelain)" ]; then
