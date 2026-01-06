@@ -66,39 +66,10 @@ jobs:
       run: |
         echo "Starting daily trading simulation at $(date)"
         
-        if [ "${{ github.event.inputs.ticker }}" != "" ]; then
-          echo "Running simulation for single ticker: ${{ github.event.inputs.ticker }}"
-          python real_trading_simulator.py --ticker "${{ github.event.inputs.ticker }}" --days "${{ github.event.inputs.days || '1' }}"
-        elif [ "${{ github.event.inputs.portfolio }}" == "true" ] || [ "${{ github.event_name }}" == "schedule" ]; then
-          echo "Running full portfolio simulation"
-          python real_trading_simulator.py --portfolio --days "${{ github.event.inputs.days || '1' }}"
-        else
-          echo "Running default TCS simulation"
-          python real_trading_simulator.py --ticker TCS.NS --days 1
-        fi
+        # Use the daily automation script instead of individual commands
+        python daily_predictions.py
         
         echo "Trading simulation completed at $(date)"
-
-    - name: Generate Portfolio Summary
-      run: |
-        echo "Generating portfolio summary..."
-        python -c "
-        from MSLSTM_prediction_framework import run_portfolio_predictions
-        from config import SECTORS
-        import os
-        
-        # Get all stocks from config
-        all_stocks = []
-        for sector_data in SECTORS.values():
-            all_stocks.extend(sector_data['stocks'])
-        
-        # Run predictions for all stocks
-        try:
-            run_portfolio_predictions(all_stocks[:10], prediction_days=1)  # Limit to first 10 for speed
-            print('✅ Portfolio summary generated')
-        except Exception as e:
-            print(f'❌ Portfolio summary failed: {e}')
-        "
 
     - name: Create Daily Summary Log
       run: |
@@ -121,14 +92,16 @@ jobs:
     - name: Commit and push results
       run: |
         # Add all new files
-        git add trading_results/
+        git add daily_predictions/
+        git add predictions/
+        git add evaluations/
         git add results/
         git add logs/
         
         # Check if there are any changes to commit
         if [ -n "$(git status --porcelain)" ]; then
           echo "Committing changes..."
-          git commit -m "🤖 Daily trading simulation results - $(date +%Y-%m-%d)"
+          git commit -m "🤖 Daily automation results - $(date +%Y-%m-%d)"
           git push
           echo "✅ Results pushed to repository"
         else
