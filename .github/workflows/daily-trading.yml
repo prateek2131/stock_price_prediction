@@ -198,8 +198,8 @@ $(git diff --name-only HEAD~1 HEAD 2>/dev/null | head -10 | sed 's/^/- /' || git
           echo "ℹ️ No new results to commit"
         fi
 
-    - name: Create Weekly Release (Fridays)
-      if: github.event_name == 'schedule' && contains(github.event.schedule, '* * 5')
+    - name: Create Weekly Release (Fridays or Manual)
+      if: (github.event_name == 'schedule' && contains(github.event.schedule, '* * 5')) || github.event_name == 'workflow_dispatch'
       uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
