@@ -2,35 +2,41 @@
 # Research-grade implementation for next-day trading predictions
 
 # Core Data Science
-numpy>=1.24.0
-pandas>=2.0.0
-scipy>=1.10.0
+numpy==1.24.3
+pandas==2.0.2
+scipy==1.13.1
 
 # Machine Learning & Deep Learning
-scikit-learn>=1.2.0
-tensorflow>=2.13.0
-keras>=2.13.0
+scikit-learn==1.2.2
+tensorflow==2.13.0
+keras==2.13.1
 
 # Financial Data Sources
-yfinance>=0.2.28
-alpha-vantage>=2.3.1
+yfinance==0.2.66
+alpha-vantage==2.3.1
 
 # Time Series Analysis
-statsmodels>=0.14.0
-prophet>=1.1.0
+statsmodels==0.14.0
+prophet==1.2.1
 
 # Advanced Visualization
-matplotlib>=3.7.0
-seaborn>=0.12.0
-plotly>=5.14.0
+matplotlib==3.7.1
+seaborn==0.13.2
+plotly==5.14.0
 
 # Utilities & Performance
-python-dotenv>=1.0.0
-requests>=2.31.0
-tqdm>=4.65.0
-joblib>=1.2.0
-openpyxl>=3.1.0
-xlsxwriter>=3.1.0
+python-dotenv==1.0.0
+requests==2.31.0
+tqdm==4.67.1
+joblib==1.5.2
+openpyxl==3.1.5
+xlsxwriter==3.2.9
 
 # Model Architecture Components
-hmmlearn>=0.3.0
+hmmlearn==0.3.3
+
+# Additional Dependencies
+beautifulsoup4==4.14.2
+lxml==6.0.2
+multitasking==0.0.12
+peewee==3.18.3
