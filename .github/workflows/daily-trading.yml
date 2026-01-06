@@ -37,7 +37,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install openpyxl xlsxwriter
-        # Install jq for JSON parsing in evaluation summaries
         sudo apt-get update && sudo apt-get install -y jq
 
     - name: Create required directories for results
@@ -63,11 +62,9 @@ jobs:
         echo "🤖 Models: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble (All 4 models)"
         echo "💰 P/L Tracking: Individual model performance evaluation"
         
-        # Run the comprehensive daily automation
         if python daily_predictions.py; then
           echo "✅ Daily automation completed successfully at $(date)"
           
-          # Show what was generated
           echo ""
           echo "📁 Generated Files:"
           find . -name "*.csv" -o -name "*.json" -o -name "*.md" | grep -E "(daily_predictions|predictions|evaluations|results)" | sort
@@ -80,19 +77,11 @@ jobs:
           if [ -f "daily_predictions/csv/predictions_$(date +%Y-%m-%d).csv" ]; then
             echo "✅ Multi-model prediction CSV generated"
             TOTAL_PREDICTIONS=$(wc -l < daily_predictions/csv/predictions_$(date +%Y-%m-%d).csv)
-            STOCKS_COUNT=$((TOTAL_PREDICTIONS / 4))  # 4 models per stock
+            STOCKS_COUNT=$((TOTAL_PREDICTIONS / 4))
             echo "📈 Predictions: $STOCKS_COUNT stocks × 4 models = $TOTAL_PREDICTIONS total predictions"
           fi
           if [ -f "daily_predictions/csv/ensemble_summary_$(date +%Y-%m-%d).csv" ]; then
             echo "✅ Ensemble summary CSV generated for quick reference"
-          fi
-          if [ -f "evaluations/evaluation_$(date --date='yesterday' +%Y-%m-%d).json" ] 2>/dev/null; then
-            echo "✅ Previous day model performance evaluation completed"
-            # Extract model performance if evaluation exists
-            if command -v jq >/dev/null 2>&1; then
-              echo "🏆 Model Performance Summary:"
-              jq -r '.summary.model_performance | to_entries[] | "  " + .key + ": ROI " + (.value.roi_pct | tostring) + "%, Accuracy " + (.value.direction_accuracy | tostring) + "%"' "evaluations/evaluation_$(date --date='yesterday' +%Y-%m-%d).json" 2>/dev/null || true
-            fi
           fi
           
         else
@@ -106,7 +95,8 @@ jobs:
       run: |
         echo "Creating daily summary log..."
         mkdir -p logs
-        cat > logs/daily_summary_$(date +%Y%m%d).log << EOF
+        CURRENT_DATE=$(date +%Y%m%d)
+        cat > logs/daily_summary_${CURRENT_DATE}.log << 'EOF'
         Daily Trading Simulation Summary
         ================================
         Date: $(date)
@@ -118,15 +108,6 @@ jobs:
         - MSLSTMA: Attention-enhanced MSLSTM variant
         - Stacked Ensemble: Combined model predictions
         
-        Files Generated:
-        $(find . -name "*.csv" -o -name "*.json" -o -name "*.xlsx" | head -10 | sed 's/^/- /')
-        
-        Prediction Results:
-        $(find daily_predictions predictions evaluations results -name "*.csv" 2>/dev/null | head -8 | sed 's/^/- /' || echo "- No prediction files found")
-        
-        Model Performance Files:
-        $(find evaluations -name "evaluation_*.json" 2>/dev/null | tail -3 | sed 's/^/- /' || echo "- No evaluation files found yet")
-        
         Status: Completed Successfully
         EOF
 
@@ -134,7 +115,6 @@ jobs:
       run: |
         echo "💾 Storing all prediction results in GitHub..."
         
-        # Add all result files and directories (with existence check)
         for dir in daily_predictions predictions evaluations results logs; do
           if [ -d "$dir" ] && [ "$(ls -A $dir 2>/dev/null)" ]; then
             echo "📁 Adding $dir/ ($(find $dir -type f | wc -l) files)"
@@ -144,49 +124,26 @@ jobs:
           fi
         done
         
-        # Also add any individual result files in root
         git add *.csv *.json *.log *.xlsx *.md 2>/dev/null || true
         
-        # Create comprehensive commit message
         COMMIT_DATE=$(date +%Y-%m-%d)
         COMMIT_TIME=$(date +%H:%M:%S)
         
-        # Check what we're committing
         CHANGED_FILES=$(git status --porcelain | wc -l)
         
         if [ "$CHANGED_FILES" -gt 0 ]; then
           echo "📊 Committing $CHANGED_FILES changed files..."
           
-          # Count predictions if available
-          PREDICTION_COUNT="unknown"
-          MODEL_COUNT="unknown"
-          if [ -f "daily_predictions/csv/predictions_${COMMIT_DATE}.csv" ]; then
-            TOTAL_PREDICTIONS=$(wc -l < "daily_predictions/csv/predictions_${COMMIT_DATE}.csv")
-            PREDICTION_COUNT=$((TOTAL_PREDICTIONS - 1))  # Subtract header
-            MODEL_COUNT=$((PREDICTION_COUNT / 40))  # Assuming 40 stocks
-          fi
-          
-          # Check for evaluation data
-          EVAL_INFO=""
-          YESTERDAY=$(date --date='yesterday' +%Y-%m-%d)
-          if [ -f "evaluations/evaluation_${YESTERDAY}.json" ]; then
-            EVAL_INFO="📊 Previous day P/L evaluation included"
-          fi
-          
           git commit -m "🤖 Multi-Model Stock Predictions - $COMMIT_DATE
 
 📅 Date: $COMMIT_DATE at $COMMIT_TIME UTC
-📊 Predictions: $PREDICTION_COUNT total (40 stocks × $MODEL_COUNT models)  
 🎯 Models: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble
 💰 Features: Individual model P/L tracking & ROI analysis
 📈 Target: Next trading day forecasts
-🔄 Automation: GitHub Actions (Scheduled)
-$EVAL_INFO
+🔄 Automation: GitHub Actions
 
-Generated files:
-$(git diff --name-only HEAD~1 HEAD 2>/dev/null | head -10 | sed 's/^/- /' || git ls-files --others --cached | head -10 | sed 's/^/- /')"
+Files updated: Multi-model predictions, evaluations, and summaries"
 
-          # Push to GitHub
           if git push origin main; then
             echo "✅ All results successfully stored in GitHub!"
             echo "🔗 View results at: https://github.com/${{ github.repository }}"
@@ -198,8 +155,8 @@ $(git diff --name-only HEAD~1 HEAD 2>/dev/null | head -10 | sed 's/^/- /' || git
           echo "ℹ️ No new results to commit"
         fi
 
-    - name: Create Weekly Release (Fridays or Manual)
-      if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && contains(github.event.schedule, '* * 5'))
+    - name: Create Weekly Release
+      if: github.event_name == 'workflow_dispatch' || (github.event_name == 'schedule' && contains(github.event.schedule, '5'))
       uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -209,7 +166,6 @@ $(git diff --name-only HEAD~1 HEAD 2>/dev/null | head -10 | sed 's/^/- /' || git
         body: |
           ## 📈 Weekly Multi-Model Stock Market Predictions Summary
           
-          **Period**: Week ending $(date +%Y-%m-%d)  
           **Coverage**: 40 Indian stocks across 8 sectors  
           **Models**: Baseline LSTM, MSLSTM, MSLSTMA, Stacked Ensemble  
           **Features**: Individual model P/L tracking, ROI analysis, direction accuracy
@@ -225,7 +181,6 @@ $(git diff --name-only HEAD~1 HEAD 2>/dev/null | head -10 | sed 's/^/- /' || git
           - `daily_predictions/summary/`: Human-readable reports with P/L analysis
           - `evaluations/`: Model performance tracking with profit/loss metrics
           - `predictions/`: Raw model predictions in JSON format  
-          - `results/`: Legacy prediction results
           - `logs/`: Execution logs and system information
           
           ### 🎯 Key Features:
