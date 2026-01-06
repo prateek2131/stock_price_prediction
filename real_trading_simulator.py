@@ -72,7 +72,7 @@ class RealTradingSimulator:
             print(f"❌ Error getting data for {ticker}: {e}")
             return pd.DataFrame()
     
-    def make_prediction_with_real_model(self, ticker: str, model_type: str = 'ensemble') -> dict:
+    def make_prediction_with_real_model(self, ticker: str, model_type: str = 'all') -> dict:
         """
         Make actual prediction using your trained models
         """
@@ -86,37 +86,68 @@ class RealTradingSimulator:
             # Run prediction pipeline
             predictor.run_prediction_pipeline(retrain=False)
             
-            # Get ensemble prediction (or best available model)
+            # Return all model predictions if available
             if predictor.predictions:
-                # Try ensemble first, then fall back to best model
-                if 'ensemble' in predictor.predictions:
-                    prediction_data = predictor.predictions['ensemble']
+                if model_type == 'all':
+                    # Return all model predictions
+                    all_predictions = {}
+                    for model_name, pred_data in predictor.predictions.items():
+                        current_price = pred_data['current_price']
+                        predicted_price = pred_data['next_day_price']
+                        predicted_change = pred_data['price_change']
+                        predicted_change_pct = pred_data['price_change_pct']
+                        
+                        # Determine direction
+                        predicted_direction = 1 if predicted_price > current_price else 0
+                        confidence = pred_data.get('confidence', 0.5)
+                        
+                        all_predictions[model_name] = {
+                            'current_price': current_price,
+                            'predicted_price': predicted_price,
+                            'predicted_change': predicted_change,
+                            'predicted_change_pct': predicted_change_pct,
+                            'predicted_direction': predicted_direction,
+                            'confidence': confidence
+                        }
+                    
+                    return {
+                        'success': True,
+                        'ticker': ticker,
+                        'models': all_predictions,
+                        'prediction_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    }
                 else:
-                    # Get the model with highest confidence
-                    best_model = max(predictor.predictions.items(), key=lambda x: x[1]['confidence'])
-                    model_name, prediction_data = best_model
-                
-                current_price = prediction_data['current_price']
-                predicted_price = prediction_data['next_day_price']
-                predicted_change = prediction_data['price_change']
-                predicted_change_pct = prediction_data['price_change_pct']
-                
-                # Determine direction
-                predicted_direction = 1 if predicted_price > current_price else 0
-                confidence = prediction_data.get('confidence', 0.5)
-                
-                return {
-                    'success': True,
-                    'ticker': ticker,
-                    'current_price': current_price,
-                    'predicted_price': predicted_price,
-                    'predicted_change': predicted_change,
-                    'predicted_change_pct': predicted_change_pct,
-                    'predicted_direction': predicted_direction,
-                    'confidence': confidence,
-                    'model_type': model_type,
-                    'prediction_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                }
+                    # Return specific model or ensemble as fallback
+                    if model_type in predictor.predictions:
+                        prediction_data = predictor.predictions[model_type]
+                    elif 'ensemble' in predictor.predictions:
+                        prediction_data = predictor.predictions['ensemble']
+                    else:
+                        # Get the model with highest confidence
+                        best_model = max(predictor.predictions.items(), key=lambda x: x[1]['confidence'])
+                        model_name, prediction_data = best_model
+                    
+                    current_price = prediction_data['current_price']
+                    predicted_price = prediction_data['next_day_price']
+                    predicted_change = prediction_data['price_change']
+                    predicted_change_pct = prediction_data['price_change_pct']
+                    
+                    # Determine direction
+                    predicted_direction = 1 if predicted_price > current_price else 0
+                    confidence = prediction_data.get('confidence', 0.5)
+                    
+                    return {
+                        'success': True,
+                        'ticker': ticker,
+                        'current_price': current_price,
+                        'predicted_price': predicted_price,
+                        'predicted_change': predicted_change,
+                        'predicted_change_pct': predicted_change_pct,
+                        'predicted_direction': predicted_direction,
+                        'confidence': confidence,
+                        'model_type': model_type,
+                        'prediction_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    }
             else:
                 print(f"❌ Prediction failed for {ticker}: No predictions available")
                 return {'success': False, 'ticker': ticker, 'error': 'No predictions available'}
@@ -480,6 +511,35 @@ class RealTradingSimulator:
         print(f"📂 Loaded {len(predictions)} predictions from {date}")
         return predictions
     
+    def load_previous_predictions_from_daily(self, date: str) -> List[dict]:
+        """Load predictions from daily_predictions directory"""
+        daily_predictions_dir = Path("daily_predictions/json")
+        filename = f"predictions_{date}.json"
+        filepath = daily_predictions_dir / filename
+        
+        if not filepath.exists():
+            return []
+        
+        import json
+        try:
+            with open(filepath, 'r') as f:
+                data = json.load(f)
+            
+            # Convert daily predictions format to expected format
+            if isinstance(data, dict) and 'predictions' in data:
+                predictions = data['predictions']
+            elif isinstance(data, list):
+                predictions = data
+            else:
+                predictions = []
+            
+            print(f"📂 Loaded {len(predictions)} predictions from daily_predictions/{date}")
+            return predictions
+            
+        except Exception as e:
+            print(f"❌ Error loading predictions from daily_predictions: {e}")
+            return []
+    
     def make_predictions_only(self) -> dict:
         """Make predictions for tomorrow without validation"""
         today = datetime.now().strftime('%Y-%m-%d')
@@ -495,31 +555,30 @@ class RealTradingSimulator:
             print(f"\n[{i}/{len(stocks)}] Predicting {ticker}...")
             
             try:
-                # Get prediction for tomorrow
-                prediction = self.make_prediction_with_real_model(ticker, 'ensemble')
+                # Get predictions from all models
+                prediction = self.make_prediction_with_real_model(ticker, 'all')
                 
                 if not prediction['success']:
                     print(f"  ❌ Prediction failed: {prediction.get('error', 'Unknown')}")
                     continue
                 
-                # Store prediction with metadata
+                # Store predictions for all models
                 pred_data = {
                     'ticker': ticker,
                     'prediction_date': today,
                     'target_date': tomorrow,
-                    'current_price': prediction['current_price'],
-                    'predicted_price': prediction['predicted_price'],
-                    'predicted_change': prediction['predicted_change'],
-                    'predicted_change_pct': prediction['predicted_change_pct'],
-                    'confidence': prediction['confidence'],
-                    'model_used': 'ensemble'
+                    'models': prediction['models']  # Contains all model predictions
                 }
                 
                 predictions.append(pred_data)
                 
-                print(f"  ✅ Current: ₹{prediction['current_price']:.2f} → "
-                      f"Predicted: ₹{prediction['predicted_price']:.2f} "
-                      f"({prediction['predicted_change_pct']:+.2f}%)")
+                # Print summary for each model
+                print(f"  📊 Model predictions:")
+                for model_name, model_pred in prediction['models'].items():
+                    print(f"    {model_name}: ₹{model_pred['predicted_price']:.2f} "
+                          f"({model_pred['predicted_change_pct']:+.2f}%)")
+                
+                print(f"  ✅ All model predictions completed for {ticker}")
                 
             except Exception as e:
                 print(f"  ❌ Error: {e}")
@@ -534,19 +593,40 @@ class RealTradingSimulator:
         return {'predictions': predictions, 'date': today}
     
     def evaluate_previous_predictions(self) -> dict:
-        """Evaluate yesterday's predictions against today's actual prices"""
+        """Evaluate previous trading day's predictions against today's actual prices"""
         today = datetime.now().strftime('%Y-%m-%d')
-        yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
         
-        print(f"\n📊 Evaluating Predictions from {yesterday}")
-        print("=" * 60)
+        # Find the last trading day (weekday) for predictions
+        current_date = datetime.now()
+        days_back = 1
         
-        # Load yesterday's predictions
-        predictions = self.load_previous_predictions(yesterday)
-        if not predictions:
+        while days_back <= 7:  # Look back maximum 7 days
+            check_date = current_date - timedelta(days=days_back)
+            # Skip weekends (Saturday = 5, Sunday = 6)
+            if check_date.weekday() < 5:  # Monday = 0, Friday = 4
+                last_trading_day = check_date.strftime('%Y-%m-%d')
+                break
+            days_back += 1
+        else:
+            print("⚠️ No trading day found in the last week")
             return {'evaluated': [], 'summary': {}}
         
+        print(f"\n📊 Evaluating Predictions from {last_trading_day} (last trading day)")
+        print("=" * 60)
+        
+        # Load previous trading day's predictions
+        predictions = self.load_previous_predictions(last_trading_day)
+        if not predictions:
+            # Also try looking in daily_predictions directory
+            alt_predictions = self.load_previous_predictions_from_daily(last_trading_day)
+            if alt_predictions:
+                predictions = alt_predictions
+            else:
+                print(f"⚠️ No predictions found for {last_trading_day} in either location")
+                return {'evaluated': [], 'summary': {}}
+        
         evaluated = []
+        model_performance = {'baseline': [], 'mslstm': [], 'mslstma': [], 'ensemble': []}
         
         for pred in predictions:
             ticker = pred['ticker']
@@ -561,14 +641,130 @@ class RealTradingSimulator:
                 
                 # Get today's closing price
                 actual_price = stock_data['Close'].iloc[-1]
-                predicted_price = pred['predicted_price']
-                current_price = pred['current_price']
                 
-                # Calculate actual change
-                actual_change = actual_price - current_price
-                actual_change_pct = (actual_change / current_price) * 100
+                # Check if prediction format is old (single model) or new (multiple models)
+                if 'models' in pred:
+                    # New format with multiple models
+                    current_price = next(iter(pred['models'].values()))['current_price']  # Get from any model
+                    
+                    # Evaluate each model separately
+                    for model_name, model_pred in pred['models'].items():
+                        predicted_price = model_pred['predicted_price']
+                        predicted_change = model_pred['predicted_change']
+                        predicted_change_pct = model_pred['predicted_change_pct']
+                        confidence = model_pred['confidence']
+                        
+                        # Calculate actual change
+                        actual_change = actual_price - current_price
+                        actual_change_pct = (actual_change / current_price) * 100
+                        
+                        # Calculate prediction accuracy
+                        price_error = abs(predicted_price - actual_price)
+                        price_error_pct = (price_error / actual_price) * 100
+                        
+                        # Direction accuracy
+                        predicted_direction = 1 if predicted_change > 0 else 0
+                        actual_direction = 1 if actual_change > 0 else 0
+                        direction_correct = predicted_direction == actual_direction
+                        
+                        # Trading simulation (₹10,000 investment)
+                        investment = 10000
+                        if predicted_change > 0:  # Buy signal
+                            shares = investment / current_price
+                            profit_loss = shares * actual_change
+                            trade_action = "BUY"
+                        else:  # Hold/Sell signal
+                            profit_loss = 0  # No trade
+                            trade_action = "HOLD"
+                        
+                        evaluation = {
+                            'ticker': ticker,
+                            'model': model_name,
+                            'prediction_date': pred.get('prediction_date', 'Unknown'),
+                            'target_date': pred.get('target_date', 'Unknown'),
+                            'current_price': current_price,
+                            'predicted_price': predicted_price,
+                            'actual_price': actual_price,
+                            'predicted_change': predicted_change,
+                            'predicted_change_pct': predicted_change_pct,
+                            'actual_change': actual_change,
+                            'actual_change_pct': actual_change_pct,
+                            'price_error': price_error,
+                            'price_error_pct': price_error_pct,
+                            'direction_correct': direction_correct,
+                            'confidence': confidence,
+                            'trade_action': trade_action,
+                            'profit_loss': profit_loss,
+                            'investment': investment if trade_action == "BUY" else 0
+                        }
+                        
+                        evaluated.append(evaluation)
+                        model_performance[model_name].append(evaluation)
+                        
+                        print(f"    {model_name}: {trade_action} → {'✅' if direction_correct else '❌'} "
+                              f"P/L: ₹{profit_loss:+.2f}")
+                    
+                else:
+                    # Old format with single model - treat as ensemble
+                    predicted_price = pred['predicted_price']
+                    current_price = pred['current_price']
+                    predicted_change = pred.get('predicted_change', predicted_price - current_price)
+                    predicted_change_pct = pred.get('predicted_change_pct', (predicted_change / current_price) * 100)
+                    confidence = pred.get('confidence', 0.5)
+                    
+                    # Calculate actual change
+                    actual_change = actual_price - current_price
+                    actual_change_pct = (actual_change / current_price) * 100
+                    
+                    # Calculate prediction accuracy
+                    price_error = abs(predicted_price - actual_price)
+                    price_error_pct = (price_error / actual_price) * 100
+                    
+                    # Direction accuracy
+                    predicted_direction = 1 if predicted_change > 0 else 0
+                    actual_direction = 1 if actual_change > 0 else 0
+                    direction_correct = predicted_direction == actual_direction
+                    
+                    # Trading simulation (₹10,000 investment)
+                    investment = 10000
+                    if predicted_change > 0:  # Buy signal
+                        shares = investment / current_price
+                        profit_loss = shares * actual_change
+                        trade_action = "BUY"
+                    else:  # Hold/Sell signal
+                        profit_loss = 0  # No trade
+                        trade_action = "HOLD"
+                    
+                    evaluation = {
+                        'ticker': ticker,
+                        'model': 'ensemble',  # Assume legacy format is ensemble
+                        'prediction_date': pred.get('prediction_date', 'Unknown'),
+                        'target_date': pred.get('target_date', 'Unknown'),
+                        'current_price': current_price,
+                        'predicted_price': predicted_price,
+                        'actual_price': actual_price,
+                        'predicted_change': predicted_change,
+                        'predicted_change_pct': predicted_change_pct,
+                        'actual_change': actual_change,
+                        'actual_change_pct': actual_change_pct,
+                        'price_error': price_error,
+                        'price_error_pct': price_error_pct,
+                        'direction_correct': direction_correct,
+                        'confidence': confidence,
+                        'trade_action': trade_action,
+                        'profit_loss': profit_loss,
+                        'investment': investment if trade_action == "BUY" else 0
+                    }
+                    
+                    evaluated.append(evaluation)
+                    model_performance['ensemble'].append(evaluation)
+                    
+                    print(f"    ensemble: {trade_action} → {'✅' if direction_correct else '❌'} "
+                          f"P/L: ₹{profit_loss:+.2f}")
                 
-                # Calculate prediction accuracy
+            except Exception as e:
+                print(f"  ❌ Error evaluating {ticker}: {e}")
+                continue
                 price_error = abs(actual_price - predicted_price)
                 price_error_pct = (price_error / actual_price) * 100
                 
@@ -602,32 +798,68 @@ class RealTradingSimulator:
         
         # Calculate summary statistics
         if evaluated:
+            # Overall statistics
             avg_error = np.mean([e['price_error_pct'] for e in evaluated])
             direction_accuracy = np.mean([e['direction_correct'] for e in evaluated]) * 100
+            total_profit_loss = sum([e['profit_loss'] for e in evaluated])
+            total_investment = sum([e['investment'] for e in evaluated])
+            
+            # Model-wise performance
+            model_summaries = {}
+            for model_name, model_evals in model_performance.items():
+                if model_evals:  # Only include models that have evaluations
+                    model_profit_loss = sum([e['profit_loss'] for e in model_evals])
+                    model_investment = sum([e['investment'] for e in model_evals])
+                    model_direction_accuracy = np.mean([e['direction_correct'] for e in model_evals]) * 100
+                    model_avg_error = np.mean([e['price_error_pct'] for e in model_evals])
+                    
+                    model_summaries[model_name] = {
+                        'predictions': len(model_evals),
+                        'profit_loss': float(model_profit_loss),
+                        'investment': float(model_investment),
+                        'roi_pct': float((model_profit_loss / model_investment) * 100) if model_investment > 0 else 0,
+                        'direction_accuracy': float(model_direction_accuracy),
+                        'avg_price_error': float(model_avg_error)
+                    }
             
             summary = {
                 'total_predictions': len(evaluated),
                 'avg_price_error_pct': float(avg_error),
                 'direction_accuracy': float(direction_accuracy),
-                'date': yesterday
+                'total_profit_loss': float(total_profit_loss),
+                'total_investment': float(total_investment),
+                'overall_roi_pct': float((total_profit_loss / total_investment) * 100) if total_investment > 0 else 0,
+                'model_performance': model_summaries,
+                'date': last_trading_day
             }
             
             print(f"\n📊 EVALUATION SUMMARY")
-            print("=" * 40)
-            print(f"🎯 Predictions Evaluated: {summary['total_predictions']}")
+            print("=" * 50)
+            print(f"📅 Date: {last_trading_day}")
+            print(f"🎯 Total Predictions Evaluated: {summary['total_predictions']}")
             print(f"📈 Average Price Error: {avg_error:.2f}%")
             print(f"🎯 Direction Accuracy: {direction_accuracy:.1f}%")
+            print(f"💰 Total P/L: ₹{total_profit_loss:+,.2f}")
+            print(f"💼 Total Investment: ₹{total_investment:,.2f}")
+            print(f"📊 Overall ROI: {summary['overall_roi_pct']:+.2f}%")
+            
+            print(f"\n🤖 MODEL PERFORMANCE COMPARISON:")
+            print("-" * 50)
+            for model_name, model_stats in model_summaries.items():
+                print(f"{model_name.upper():>10}: P/L ₹{model_stats['profit_loss']:+8.2f} | "
+                      f"ROI {model_stats['roi_pct']:+6.2f}% | "
+                      f"Acc {model_stats['direction_accuracy']:5.1f}%")
             
             # Save evaluation results
             eval_dir = Path("evaluations")
             eval_dir.mkdir(exist_ok=True)
             
             import json
-            eval_file = eval_dir / f"evaluation_{yesterday}.json"
+            eval_file = eval_dir / f"evaluation_{last_trading_day}.json"
             with open(eval_file, 'w') as f:
                 json.dump({'evaluated': evaluated, 'summary': summary}, f, indent=2, default=str)
             
-            print(f"💾 Evaluation saved: {eval_file}")
+            print(f"\n💾 Evaluation saved: {eval_file}")
         
         return {'evaluated': evaluated, 'summary': summary if evaluated else {}}
 

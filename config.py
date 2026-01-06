@@ -53,6 +53,7 @@ INDIAN_STOCKS_BY_SECTOR = {
         'M&M.NS',        # Mahindra & Mahindra
         'BAJAJ-AUTO.NS', # Bajaj Auto
         'HEROMOTOCO.NS', # Hero MotoCorp
+        'TATAMOTORS.NS', # Tata Motors
     ],
     'Energy': [
         'RELIANCE.NS',  # Reliance Industries
