@@ -154,6 +154,11 @@ class ModelPredictor:
                     pred_probs = trainer.model.predict_proba(X_input)
                     next_day_price = self._convert_probs_to_next_day_price(pred_probs, latest_features)
                     confidence = self._calculate_ensemble_confidence(pred_probs)
+                    
+                    # Validate ensemble confidence
+                    if np.isnan(confidence) or confidence is None:
+                        confidence = 0.5  # Default confidence
+                    confidence = max(0.0, min(1.0, float(confidence)))  # Ensure valid range
                 else:
                     # Regression models - direct next day prediction
                     predictions = trainer.model.predict(X_input)
@@ -170,13 +175,18 @@ class ModelPredictor:
                     
                     confidence = self._calculate_regression_confidence(predictions)
                     
-                    # Ensure confidence is scalar
+                    # Ensure confidence is scalar and valid
                     if hasattr(confidence, 'iloc'):
                         confidence = confidence.iloc[0] if len(confidence) > 0 else float(confidence)
                     elif hasattr(confidence, 'item'):
                         confidence = confidence.item()
                     else:
                         confidence = float(confidence)
+                    
+                    # Validate confidence value
+                    if np.isnan(confidence) or confidence is None:
+                        confidence = 0.5  # Default confidence
+                    confidence = max(0.0, min(1.0, float(confidence)))  # Ensure valid range
                 
                 # Ensure scalar values
                 current_price = self.data['Close'].iloc[-1]
@@ -460,22 +470,67 @@ class ModelPredictor:
     
     def _calculate_ensemble_confidence(self, probs):
         """Calculate confidence for ensemble predictions"""
-        # Confidence based on how close to 0.5 (uncertainty) the prediction is
-        prob_value = probs[0] if hasattr(probs, '__getitem__') and len(probs) > 0 else probs
-        if hasattr(prob_value, 'iloc'):
-            prob_value = prob_value.iloc[0] if len(prob_value) > 0 else float(prob_value)
-        elif hasattr(prob_value, 'item'):
-            prob_value = prob_value.item()
-        
-        confidence = abs(float(prob_value) - 0.5) * 2  # Scale to 0-1
-        return float(confidence)
+        try:
+            # Confidence based on how close to 0.5 (uncertainty) the prediction is
+            prob_value = probs[0] if hasattr(probs, '__getitem__') and len(probs) > 0 else probs
+            
+            if hasattr(prob_value, 'iloc'):
+                prob_value = prob_value.iloc[0] if len(prob_value) > 0 else float(prob_value)
+            elif hasattr(prob_value, 'item'):
+                prob_value = prob_value.item()
+            
+            # Handle edge cases
+            if np.isnan(prob_value) or prob_value is None:
+                return 0.5  # Default confidence
+            
+            prob_value = float(prob_value)
+            
+            # Ensure prob_value is between 0 and 1
+            prob_value = max(0.0, min(1.0, prob_value))
+            
+            # Calculate confidence: distance from 0.5 (uncertainty), scaled to 0-1
+            confidence = abs(prob_value - 0.5) * 2
+            
+            return float(confidence)
+            
+        except Exception as e:
+            print(f"Warning: Error calculating ensemble confidence: {e}")
+            return 0.5  # Default confidence on error
     
     def _calculate_regression_confidence(self, predictions):
         """Calculate confidence for regression models"""
-        # For regression models, use volatility-based confidence
-        recent_volatility = np.std(np.diff(self.data['Close'].values[-30:]))
-        confidence = 1.0 / (1.0 + recent_volatility)  # Higher volatility = lower confidence
-        return float(confidence)
+        try:
+            # For regression models, use volatility-based confidence
+            close_prices = self.data['Close'].values
+            
+            # Use available data if less than 30 days
+            lookback_period = min(30, len(close_prices) - 1)
+            if lookback_period < 2:
+                # Not enough data for volatility calculation, return default confidence
+                return 0.5
+            
+            # Calculate recent volatility
+            recent_prices = close_prices[-lookback_period:]
+            price_changes = np.diff(recent_prices)
+            recent_volatility = np.std(price_changes)
+            
+            # Handle edge cases
+            if np.isnan(recent_volatility) or recent_volatility == 0:
+                return 0.5
+            
+            # Calculate confidence (normalize volatility to reasonable range)
+            # Typical daily volatility for stocks is 1-3%, so scale accordingly
+            normalized_volatility = recent_volatility / np.mean(recent_prices) * 100  # Convert to percentage
+            confidence = 1.0 / (1.0 + normalized_volatility / 2.0)  # Scale volatility
+            
+            # Ensure confidence is between 0 and 1
+            confidence = max(0.0, min(1.0, confidence))
+            
+            return float(confidence)
+            
+        except Exception as e:
+            print(f"Warning: Error calculating regression confidence: {e}")
+            return 0.5  # Default confidence on error
     
     def _generate_future_sequence(self, initial_pred, last_actual, days):
         """Generate sequence of future prices"""
