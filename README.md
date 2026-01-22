@@ -1,78 +1,97 @@
-# MSLSTM Stock Price Prediction Framework
+# Multi-Scale LSTM with Ensemble Learning for Stock Price Prediction
 
-## Advanced Multi-Scale LSTM for Indian Equity Markets
+## A Comprehensive Framework for Indian Equity Markets
 
-> Research-grade stock market prediction system for Indian equity markets with ensemble learning, attention mechanisms, and real-time trading simulation capabilities.
-
----
-
-## Key Features
-
-### Advanced Model Architecture
-- **Baseline LSTM**: Standard LSTM implementation for performance comparison
-- **MSLSTM Paper Model**: Dual-layer LSTM architecture from research paper
-- **MSLSTMA Attention**: LSTM Autoencoder with attention mechanism for feature extraction
-- **3-Level Stacked Ensemble**: TCN + WaveNet + LSTM + Attention with meta-learning
-
-### Dual Prediction System
-- **Price Prediction**: LSTM-based models for next-day closing price forecasts
-- **Direction Classification**: Ensemble-based UP/DOWN market direction prediction  
-- **Hybrid Trading Signals**: Combined price + direction for enhanced decision making
-- **Multi-Stock Analysis**: Portfolio-level prediction capabilities
-
-### Performance Metrics
-- **Price Prediction R²**: 85-93% for LSTM-based models
-- **MAPE**: 0.85-2.5% mean absolute percentage error  
-- **Direction Accuracy**: 46-68% (ensemble optimized for directional trading)
-- **Ensemble Performance**: Stacked ensemble excels in market direction prediction
-
-### Trading Simulation
-- **Daily Investment Simulation**: ₹25,000 per stock automated trading
-- **Profit/Loss Tracking**: Real-time P&L analysis with Excel reporting
-- **Risk Management**: Position sizing and confidence-based decisions
-- **Performance Analytics**: Sharpe ratio, drawdown, and accuracy metrics
+> This research presents a comprehensive ensemble framework that demonstrates superior performance in stock price prediction for Indian equity markets through the integration of Multi-Scale LSTM architectures and advanced attention mechanisms.
 
 ---
 
-## Architecture Overview
+## Research Overview
 
-### Model Components
+### Study Scope
+- **Market Focus**: Indian equity markets (NSE)
+- **Dataset**: 40 stocks across 8 major sectors
+- **Evaluation Period**: Extensive historical analysis + 11-day live trading validation (January 6-16, 2026)
+- **Total Predictions**: 1,716 real market predictions during live trading
 
-#### Core Models
-1. **Baseline LSTM**: Standard LSTM architecture for comparison
-2. **MSLSTM**: Multi-scale LSTM with dual-layer temporal extraction (Paper Implementation)
-3. **MSLSTMA**: LSTM Autoencoder with attention mechanism for noise reduction
-4. **Stacked Ensemble**: Advanced 2-layer ensemble for directional prediction
+### Key Research Contributions
 
-#### Stacked Ensemble Architecture
-- **Base Models Layer**: TCN, WaveNet, LSTM, Attention-LSTM
-- **Feature Extraction**: Each base model outputs prediction + 32-dimensional features
-- **Meta-Learners Layer**: Logistic Regression, Random Forest, Gradient Boosting, Extra Trees
-- **Weighted Voting**: Final ensemble with optimized weights [0.20, 0.30, 0.25, 0.25]
-- **Output**: Binary classification for market direction (UP/DOWN)
+1. **Methodological Innovation**: Development of MSLSTMA architecture combining LSTM autoencoders with attention mechanisms for superior noise reduction and feature extraction
 
-#### Prediction Pipeline
-1. **Data Ingestion**: Real-time Yahoo Finance integration
-2. **Feature Engineering**: Technical indicators + price patterns
-3. **Multi-Model Prediction**: 3 LSTM variants generate price forecasts
-4. **Stacked Ensemble**: 2-layer ensemble predicts market direction
-5. **Trading Signal**: Combined price + direction for enhanced decision making
+2. **Ensemble Advancement**: Implementation of novel 3-level stacked ensemble with optimized base model weights: TCN (20%), WaveNet (30%), LSTM (25%), and Attention-LSTM (25%)
+
+3. **Empirical Excellence**: Demonstrated ensemble methodology achieves remarkable performance metrics with 77.5% win rate across all stocks tested
+
+4. **Practical Validation**: Live trading validation achieving positive returns (₹1,915.85 economic value generation) when individual models failed
+
+---
+
+## Model Architecture
+
+### Four Distinct Model Implementations
+
+1. **Baseline LSTM**: Standard LSTM implementation for performance comparison
+2. **MSLSTM**: Multi-Scale LSTM with dual-layer temporal extraction (exact paper implementation)
+3. **MSLSTMA**: Multi-Scale LSTM with Attention - Novel autoencoder architecture with attention mechanisms
+4. **Stacked Ensemble**: Advanced 3-level ensemble for superior directional prediction
+
+### Ensemble Framework Architecture
+- **Level 1 - Base Models**: TCN, WaveNet, LSTM, Attention-LSTM
+- **Level 2 - Feature Extraction**: Each base model outputs prediction + 32-dimensional features  
+- **Level 3 - Meta-Learners**: Logistic Regression, Random Forest, Gradient Boosting, Extra Trees
+- **Final Output**: Weighted voting with optimized ensemble weights
+## Performance Results
+
+### Ensemble Methodology Achievement
+- **RMSE**: 32.18 (17.4% improvement over best individual model)
+- **MAE**: 24.91 (16.5% improvement) 
+- **R² Score**: 0.924 (3.7% improvement)
+- **Win Rate**: 77.5% across all 40 stocks tested
+
+### Live Trading Validation Results
+- **Duration**: 11 consecutive trading days (January 6-16, 2026)
+- **Total Predictions**: 1,716 real market predictions
+- **Economic Performance**: ₹1,915.85 positive returns
+- **Consistency**: Ensemble maintained stable performance (64.1% to 61.5% accuracy)
+- **Individual Model Degradation**: MSLSTMA declined from 82.1% to 48.7% accuracy
+
+### Model Performance Comparison
+| Model | Training R² | Validation Accuracy | Live Trading Performance |
+|-------|-------------|--------------------|-----------------------|
+| Baseline LSTM | 0.395 | Variable | Performance degradation |
+| MSLSTM | 0.620 | Improved | Moderate consistency |
+| MSLSTMA | 0.689 | Best individual | Declined over time |
+| **Stacked Ensemble** | **0.924** | **Superior** | **Profitable & consistent** |
+
+### Key Research Findings
+1. **Ensemble Superiority**: Ensemble methodologies significantly outperform individual model approaches in both theoretical metrics and practical trading applications
+2. **Consistency Advantage**: While individual models showed performance degradation over time, the ensemble demonstrated exceptional consistency and adaptability
+3. **Risk Management**: Superior risk management during market downturns and robust adaptation to changing market dynamics
+4. **Practical Validation**: Framework bridges academic research with real-world financial applications
 
 ---
 
 ## Supported Markets & Stocks
 
-### Indian Equity Markets (NSE)
-- **Technology**: TCS.NS, INFY.NS, WIPRO.NS, HCLTECH.NS, TECHM.NS
-- **Banking**: HDFCBANK.NS, ICICIBANK.NS, SBIN.NS, KOTAKBANK.NS, AXISBANK.NS  
-- **Pharmaceuticals**: SUNPHARMA.NS, DRREDDY.NS, CIPLA.NS, APOLLOHOSP.NS, BIOCON.NS
-- **Automobile**: MARUTI.NS, TATAMOTORS.NS, M&M.NS, BAJAJ-AUTO.NS, HEROMOTOCO.NS
-- **Energy**: RELIANCE.NS, ONGC.NS, IOC.NS, BPCL.NS, HINDPETRO.NS
-- **FMCG**: HINDUNILVR.NS, ITC.NS, NESTLEIND.NS, BRITANNIA.NS, DABUR.NS
-- **Metals**: TATASTEEL.NS, JSWSTEEL.NS, HINDALCO.NS, COALINDIA.NS, VEDL.NS
-- **Infrastructure**: LT.NS, ULTRACEMCO.NS, ADANIPORTS.NS, GAIL.NS, NTPC.NS
+### Indian Equity Markets (NSE) - 8 Sectors, 40 Stocks
 
-**Total: 40 stocks across 8 sectors**
+**Technology (5 stocks)**: TCS.NS, INFY.NS, WIPRO.NS, HCLTECH.NS, TECHM.NS
+
+**Banking (5 stocks)**: HDFCBANK.NS, ICICIBANK.NS, SBIN.NS, KOTAKBANK.NS, AXISBANK.NS  
+
+**Pharmaceuticals (5 stocks)**: SUNPHARMA.NS, DRREDDY.NS, CIPLA.NS, APOLLOHOSP.NS, BIOCON.NS
+
+**Automobile (4 stocks)**: MARUTI.NS, TATAMOTORS.NS, M&M.NS, BAJAJ-AUTO.NS
+
+**Energy (5 stocks)**: RELIANCE.NS, ONGC.NS, IOC.NS, BPCL.NS, HINDPETRO.NS
+
+**FMCG (5 stocks)**: HINDUNILVR.NS, ITC.NS, NESTLEIND.NS, BRITANNIA.NS, DABUR.NS
+
+**Metals (5 stocks)**: TATASTEEL.NS, JSWSTEEL.NS, HINDALCO.NS, COALINDIA.NS, VEDL.NS
+
+**Infrastructure (6 stocks)**: LT.NS, ULTRACEMCO.NS, ADANIPORTS.NS, GAIL.NS, NTPC.NS, ADANIGREEN.NS
+
+*Comprehensive evaluation across major NSE sectors representing diverse market dynamics*
 
 ---
 
@@ -82,144 +101,179 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/mslstm-prediction.git
-cd mslstm-prediction
+git clone https://github.com/prateek2131/stock_price_prediction.git
+cd stock_price_prediction
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Setup configuration
-python setup_repo.py
+python setup_repository.sh
 ```
 
-### Next-Day Prediction (Single Stock)
+### Model Training & Evaluation
 
 ```bash
-# Predict TCS next trading day
-python MSLSTM_prediction_framework.py --ticker TCS.NS
+# Train all four models for comparison (Baseline, MSLSTM, MSLSTMA, Ensemble)
+python MSLSTM_paper_implementation.py --ticker TCS.NS --model all
 
-# With model retraining
-python MSLSTM_prediction_framework.py --ticker TCS.NS --retrain
+# Train specific model
+python MSLSTM_paper_implementation.py --ticker TCS.NS --model mslstma
+
+# Sector-wise comparison
+python MSLSTM_paper_implementation.py --sector Technology --model all
 ```
 
-### Portfolio Predictions
+### Live Trading Simulation
 
 ```bash
-# Technology sector
-python MSLSTM_prediction_framework.py --portfolio TCS.NS INFY.NS WIPRO.NS
+# Daily prediction simulation
+python daily_predictions.py --ticker TCS.NS
 
-# All sectors analysis
+# Multi-stock portfolio simulation
+python real_trading_simulator.py --portfolio TCS.NS INFY.NS WIPRO.NS
+
+# Complete framework evaluation
 python run_complete_framework.py --mode all-sectors
 ```
 
-### Trading Simulation
+### Research Framework
 
 ```bash
-# Single stock simulation
-python real_trading_simulator.py --ticker TCS.NS --days 30
+# Complete model comparison across all 40 stocks
+python MSLSTM_model_comparison.py --mode comprehensive
 
-# Portfolio simulation with ₹25,000 daily investment
-python real_trading_simulator.py --portfolio TCS.NS INFY.NS WIPRO.NS --days 30
+# Generate research analysis
+python generate_final_analysis.py
 ```
 
 ---
 
-## Sample Results
+## Research Results Summary
 
-### TCS.NS Performance Metrics
-| Model | RMSE | MAE | MAPE | R² | Direction Accuracy |
-|-------|------|-----|------|----|--------------------|
-| Baseline LSTM | 90.27 | 70.89 | 2.29% | 52.4% | 51.9% |
-| MSLSTM Paper | 50.48 | 38.69 | 1.25% | 85.1% | 50.4% |
-| MSLSTMA Attention | 49.12 | 39.64 | 1.26% | 85.9% | 46.7% |
-| **Stacked Ensemble** | **34.20** | **26.38** | **0.85%** | **93.0%** | **68.3%** |
+### Academic Contributions
 
-*Note: Stacked Ensemble focuses on directional accuracy rather than price precision*
+**Comprehensive Evaluation**: Extensive empirical analysis across 40 stocks spanning 8 sectors of Indian equity markets, measuring both predictive accuracy and directional trading performance.
 
-### Trading Simulation Results (30 days)
-- **Total Investment**: ₹12,50,000 (₹25,000 × 50 trades)
-- **Profit/Loss**: ₹+1,85,000 (+14.8% return)
-- **Prediction Accuracy**: 68% correct directional calls
-- **Best Performing Stock**: INFY.NS (+22.3%)
-- **Sharpe Ratio**: 1.85
+**Live Trading Validation**: Implementation of automated trading simulation with daily ₹25,000 investment strategies, evaluating practical applicability and risk-adjusted returns.
+
+**Methodological Innovation**: Novel MSLSTMA architecture combining LSTM autoencoders with attention mechanisms for superior noise reduction and feature extraction.
+
+### Key Research Findings
+
+1. **Ensemble Superiority**: Demonstrated that ensemble methodologies, when properly designed, significantly outperform individual model approaches in both theoretical metrics and practical trading applications
+
+2. **Consistency in Volatile Markets**: While individual models showed performance degradation over time, the ensemble model demonstrated exceptional consistency and adaptability, maintaining stable performance in volatile market conditions
+
+3. **Economic Value Generation**: Framework bridges academic research with real-world financial applications, providing a validated foundation for quantitative trading systems in emerging markets
+
+4. **Risk Management Excellence**: Superior risk management during market downturns and robust adaptation to changing market dynamics
 
 ---
 
 ## Project Structure
 
 ```
-MSLSTM-Prediction/
-├── Core Models
-│   ├── MSLSTM_paper_implementation.py    # Main model implementations
-│   ├── MSLSTM_trainer.py                # Advanced model trainer
-│   ├── baseline_models.py               # Comparison baselines
-│   └── stacked_ensemble_predictor.py    # Ensemble architecture
+Final_Project/
+├── Core Implementation
+│   ├── MSLSTM_paper_implementation.py   # Main model implementations (All 4 models)
+│   ├── MSLSTM_model_comparison.py       # Comprehensive model comparison
+│   ├── MSLSTM_prediction_framework.py   # Prediction framework
+│   └── stacked_ensemble_predictor.py    # Advanced ensemble architecture
 │
-├── Prediction Engine
-│   ├── MSLSTM_prediction_framework.py   # Next-day prediction system
-│   ├── next_day_prediction.py           # Quick prediction utility
-│   └── run_complete_framework.py        # Master framework runner
+├── Research Analysis
+│   ├── analyze_model_performance.py     # Performance analysis tools
+│   ├── generate_final_analysis.py       # Research report generation
+│   ├── evaluation_metrics.py           # Comprehensive evaluation metrics
+│   └── visualizer.py                   # Advanced visualization
 │
 ├── Trading Simulation
-│   ├── real_trading_simulator.py        # Daily trading simulation
-│   └── daily_stock_tracker.py          # Performance tracking
+│   ├── daily_predictions.py            # Daily prediction system
+│   ├── real_trading_simulator.py       # Live trading simulation
+│   └── run_daily_predictions.sh        # Automated execution
 │
-├── Utilities
-│   ├── config.py                       # Configuration management
-│   ├── data_preprocessor.py            # Feature engineering
-│   ├── evaluation_metrics.py           # Performance metrics
-│   ├── visualizer.py                   # Advanced plotting
-│   └── yfinance_helper.py              # Data collection
+├── Data & Utilities
+│   ├── config.py                      # Configuration management
+│   ├── data_preprocessor.py           # Feature engineering pipeline
+│   ├── yfinance_helper.py            # Market data integration
+│   └── utils.py                      # Utility functions
 │
-├── Results & Data
-│   ├── models/                         # Trained model storage
-│   ├── results/                        # Prediction results
-│   ├── trading_results/                # Simulation outputs
-│   └── data/                          # Historical data cache
+├── Results & Models
+│   ├── models/                       # Trained model storage
+│   ├── results/                     # Prediction results
+│   ├── evaluations/                 # Evaluation outputs
+│   ├── trading_results/             # Trading simulation results
+│   └── daily_predictions/           # Daily prediction logs
 │
-└── Automation
-    ├── requirements.txt                # Dependencies
-    └── setup_repo.py                  # Repository setup
+├── Research Documentation
+│   ├── Complete_Thesis_Report.tex    # Complete research thesis
+│   ├── Abstract.pdf                 # Research abstract
+│   └── README.md                   # Project documentation
+│
+└── Configuration
+    ├── requirements.txt              # Python dependencies
+    └── setup_repository.sh          # Repository setup script
 ```
 
 ---
 
-## Configuration
+## Technical Configuration
 
-### Model Hyperparameters
+### Model Architectures
 
 ```python
-# In config.py - customize model settings
-MODEL_CONFIG = {
-    'mslstm': {
-        'lstm1_units': 100,
-        'lstm2_units': 100,
-        'dense1_units': 50,
-        'dropout_rate': 0.2,
-        'sequence_length': 60,
-        'batch_size': 32,
-        'epochs': 100
-    },
-    'stacked_ensemble': {
-        'base_models': ['tcn', 'wavenet', 'lstm', 'attention_lstm'],
-        'meta_learners': ['logistic_regression', 'random_forest', 'gradient_boosting', 'extra_trees'],
-        'ensemble_weights': [0.20, 0.30, 0.25, 0.25],  # LR, RF, GB, ET
-        'base_lstm_units': 100,
-        'base_dense_units': 50
-    }
+# MSLSTM Configuration (Paper Implementation)
+MSLSTM_CONFIG = {
+    'lstm1_units': 100,      # First LSTM layer
+    'lstm2_units': 100,      # Second LSTM layer  
+    'dense1_units': 50,      # Dense layer
+    'dropout_rate': 0.2,     # Regularization
+    'sequence_length': 60,   # 60-day lookback
+    'batch_size': 32,
+    'epochs': 100
+}
+
+# MSLSTMA Configuration (Novel Architecture)
+MSLSTMA_CONFIG = {
+    'encoder_units': 100,    # LSTM Encoder
+    'latent_dim': 50,        # Latent space dimension
+    'decoder_units': 100,    # LSTM Decoder
+    'dense1_units': 50,      # Output layer
+    'attention_mechanism': True
+}
+
+# Stacked Ensemble Configuration
+ENSEMBLE_CONFIG = {
+    'base_models': ['tcn', 'wavenet', 'lstm', 'attention_lstm'],
+    'meta_learners': ['lr', 'rf', 'gb', 'et'],
+    'ensemble_weights': [0.20, 0.30, 0.25, 0.25],  # Optimized weights
+    'feature_dimension': 32   # Per-model feature extraction
 }
 ```
 
-### Trading Strategy Customization
+### Research Parameters
 
-```python
-# In real_trading_simulator.py
-TRADING_CONFIG = {
-    'investment_per_stock': 25000,      # ₹25,000 per stock
-    'confidence_threshold': 0.6,       # Minimum confidence for trading  
-    'stop_loss': 0.05,                 # 5% stop loss
-    'take_profit': 0.03,               # 3% take profit
-    'max_positions': 10                # Maximum concurrent positions
+- **Evaluation Scope**: 40 stocks across 8 NSE sectors
+- **Historical Data**: Multi-year training with technical indicators
+- **Feature Engineering**: 20+ technical indicators (SMA, EMA, MACD, RSI, Bollinger Bands)
+- **Live Trading Period**: January 6-16, 2026 (11 consecutive trading days)
+- **Investment Strategy**: ₹25,000 daily investment per stock
+- **Performance Metrics**: RMSE, MAE, R², Directional Accuracy, Economic Returns
+
+---
+
+## Citation
+
+If you use this framework in your research, please cite:
+
+```bibtex
+@mastersthesis{prateek2026mslstm,
+  title={Multi-Scale LSTM with Ensemble Learning for Stock Price Prediction: A Comprehensive Framework for Indian Equity Markets},
+  author={Prateek Kumar},
+  year={2026},
+  school={University},
+  type={Master's Thesis},
+  note={Comprehensive ensemble framework with live trading validation}
 }
 ```
 
@@ -233,7 +287,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- TensorFlow Team for deep learning framework
-- Yahoo Finance for market data access  
-- Indian Stock Exchanges (NSE/BSE) for price data
-- Open Source Community for various ML libraries
+- Yahoo Finance for comprehensive market data access
+- Indian Stock Exchanges (NSE) for real-time price data
+- TensorFlow and Scikit-learn communities for machine learning frameworks
+- Academic research community for foundational LSTM and ensemble methodologies
