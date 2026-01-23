@@ -1,0 +1,1526 @@
+{
+  "predictions": [
+    {
+      "ticker": "ADANIENT.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 2086.39990234375,
+          "predicted_price": 2167.387101082888,
+          "predicted_change": 80.98719873913797,
+          "predicted_change_pct": 3.881671900394612,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 2086.39990234375,
+          "predicted_price": 2110.4511292524403,
+          "predicted_change": 24.051226908690296,
+          "predicted_change_pct": 1.1527620798712945,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 2086.39990234375,
+          "predicted_price": 2093.305232804567,
+          "predicted_change": 6.905330460816913,
+          "predicted_change_pct": 0.3309686917191579,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 2086.39990234375,
+          "predicted_price": 2120.724915715968,
+          "predicted_change": 34.32501337221811,
+          "predicted_change_pct": 1.6451790154734525,
+          "predicted_direction": 1,
+          "confidence": 0.5502619632883539
+        }
+      }
+    },
+    {
+      "ticker": "ADANIGREEN.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 904.2999877929688,
+          "predicted_price": 946.5629086363151,
+          "predicted_change": 42.262920843346365,
+          "predicted_change_pct": 4.673550969130624,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 904.2999877929688,
+          "predicted_price": 891.6580712381437,
+          "predicted_change": -12.641916554825002,
+          "predicted_change_pct": -1.3979781848365236,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 904.2999877929688,
+          "predicted_price": 874.3861940939878,
+          "predicted_change": -29.913793698980953,
+          "predicted_change_pct": -3.3079502491190405,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 904.2999877929688,
+          "predicted_price": 891.4706953245905,
+          "predicted_change": -12.829292468378299,
+          "predicted_change_pct": -1.418698732893875,
+          "predicted_direction": 0,
+          "confidence": 0.28060060396998354
+        }
+      }
+    },
+    {
+      "ticker": "ADANIPORTS.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1414.199951171875,
+          "predicted_price": 1387.577568080611,
+          "predicted_change": -26.622383091264055,
+          "predicted_change_pct": -1.8825048798229327,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1414.199951171875,
+          "predicted_price": 1438.7623405653721,
+          "predicted_change": 24.562389393497142,
+          "predicted_change_pct": 1.7368399265707435,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1414.199951171875,
+          "predicted_price": 1392.201202128097,
+          "predicted_change": -21.998749043777934,
+          "predicted_change_pct": -1.5555614342617319,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1414.199951171875,
+          "predicted_price": 1433.2112046891993,
+          "predicted_change": 19.01125351732435,
+          "predicted_change_pct": 1.34431156652004,
+          "predicted_direction": 1,
+          "confidence": 0.5014519597784404
+        }
+      }
+    },
+    {
+      "ticker": "APOLLOHOSP.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 6797.0,
+          "predicted_price": 6837.978912118124,
+          "predicted_change": 40.978912118123844,
+          "predicted_change_pct": 0.6028970445508985,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 6797.0,
+          "predicted_price": 6958.934307385061,
+          "predicted_change": 161.9343073850614,
+          "predicted_change_pct": 2.3824379488754044,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 6797.0,
+          "predicted_price": 6884.054487483372,
+          "predicted_change": 87.05448748337221,
+          "predicted_change_pct": 1.2807781003880025,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 6797.0,
+          "predicted_price": 6840.616436392559,
+          "predicted_change": 43.61643639255908,
+          "predicted_change_pct": 0.6417012857519389,
+          "predicted_direction": 1,
+          "confidence": 0.29359149608090496
+        }
+      }
+    },
+    {
+      "ticker": "AXISBANK.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1294.800048828125,
+          "predicted_price": 1263.706272014897,
+          "predicted_change": -31.093776813228033,
+          "predicted_change_pct": -2.4014346339706893,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1294.800048828125,
+          "predicted_price": 1273.7818166344805,
+          "predicted_change": -21.018232193644508,
+          "predicted_change_pct": -1.6232801514540651,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1294.800048828125,
+          "predicted_price": 1289.8656357036816,
+          "predicted_change": -4.934413124443381,
+          "predicted_change_pct": -0.3810946044456309,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1294.800048828125,
+          "predicted_price": 1294.7479435674493,
+          "predicted_change": -0.052105260675716636,
+          "predicted_change_pct": -0.0040241935982954224,
+          "predicted_direction": 0,
+          "confidence": 0.0017521789085788164
+        }
+      }
+    },
+    {
+      "ticker": "BAJAJ-AUTO.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 9370.0,
+          "predicted_price": 9271.06587846519,
+          "predicted_change": -98.9341215348104,
+          "predicted_change_pct": -1.0558604219296774,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 9370.0,
+          "predicted_price": 9305.233465730736,
+          "predicted_change": -64.7665342692635,
+          "predicted_change_pct": -0.6912116784339783,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 9370.0,
+          "predicted_price": 9379.797053979128,
+          "predicted_change": 9.797053979127668,
+          "predicted_change_pct": 0.10455767320307618,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 9370.0,
+          "predicted_price": 9227.107466237694,
+          "predicted_change": -142.8925337623059,
+          "predicted_change_pct": -1.5250003603234363,
+          "predicted_direction": 0,
+          "confidence": 0.5360785242240108
+        }
+      }
+    },
+    {
+      "ticker": "BRITANNIA.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 5932.0,
+          "predicted_price": 5769.536488204278,
+          "predicted_change": -162.4635117957223,
+          "predicted_change_pct": -2.738764527911708,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 5932.0,
+          "predicted_price": 5848.2705975210265,
+          "predicted_change": -83.7294024789735,
+          "predicted_change_pct": -1.4114868927675883,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 5932.0,
+          "predicted_price": 5819.782930993766,
+          "predicted_change": -112.21706900623394,
+          "predicted_change_pct": -1.8917240223572773,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 5932.0,
+          "predicted_price": 5901.477632572704,
+          "predicted_change": -30.52236742729565,
+          "predicted_change_pct": -0.5145375493475379,
+          "predicted_direction": 0,
+          "confidence": 0.35673191731397724
+        }
+      }
+    },
+    {
+      "ticker": "CIPLA.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1370.4000244140625,
+          "predicted_price": 1426.937792373661,
+          "predicted_change": 56.53776795959857,
+          "predicted_change_pct": 4.125639736745645,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1370.4000244140625,
+          "predicted_price": 1449.67496518814,
+          "predicted_change": 79.27494077407755,
+          "predicted_change_pct": 5.784802930660549,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1370.4000244140625,
+          "predicted_price": 1475.2567966205243,
+          "predicted_change": 104.85677220646176,
+          "predicted_change_pct": 7.651544829130819,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1370.4000244140625,
+          "predicted_price": 1377.2558109950683,
+          "predicted_change": 6.855786581005759,
+          "predicted_change_pct": 0.5002763031865198,
+          "predicted_direction": 1,
+          "confidence": 0.1548476734597577
+        }
+      }
+    },
+    {
+      "ticker": "COALINDIA.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 423.20001220703125,
+          "predicted_price": 412.7680720600765,
+          "predicted_change": -10.43194014695473,
+          "predicted_change_pct": -2.465014141316091,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 423.20001220703125,
+          "predicted_price": 421.33991761808284,
+          "predicted_change": -1.8600945889484137,
+          "predicted_change_pct": -0.4395308448238988,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 423.20001220703125,
+          "predicted_price": 418.4449024365749,
+          "predicted_change": -4.755109770456329,
+          "predicted_change_pct": -1.1236081364123685,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 423.20001220703125,
+          "predicted_price": 413.08115753334664,
+          "predicted_change": -10.11885467368461,
+          "predicted_change_pct": -2.3910336440950863,
+          "predicted_direction": 0,
+          "confidence": 0.539852413430325
+        }
+      }
+    },
+    {
+      "ticker": "DABUR.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 525.3499755859375,
+          "predicted_price": 507.86797970567477,
+          "predicted_change": -17.48199588026273,
+          "predicted_change_pct": -3.327685674823644,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 525.3499755859375,
+          "predicted_price": 507.4576878550215,
+          "predicted_change": -17.892287730915996,
+          "predicted_change_pct": -3.4057844413070026,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 525.3499755859375,
+          "predicted_price": 509.3452488906587,
+          "predicted_change": -16.004726695278805,
+          "predicted_change_pct": -3.0464885198535074,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 525.3499755859375,
+          "predicted_price": 523.4279319548212,
+          "predicted_change": -1.922043631116253,
+          "predicted_change_pct": -0.36585965935803655,
+          "predicted_direction": 0,
+          "confidence": 0.14402079590253403
+        }
+      }
+    },
+    {
+      "ticker": "DIVISLAB.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 6071.0,
+          "predicted_price": 6387.633162384853,
+          "predicted_change": 316.63316238485277,
+          "predicted_change_pct": 5.2155025924040865,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 6071.0,
+          "predicted_price": 6179.420656424016,
+          "predicted_change": 108.42065642401576,
+          "predicted_change_pct": 1.7858780501402771,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 6071.0,
+          "predicted_price": 6246.933255139738,
+          "predicted_change": 175.93325513973832,
+          "predicted_change_pct": 2.8979287619788963,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 6071.0,
+          "predicted_price": 6085.356620725312,
+          "predicted_change": 14.356620725311586,
+          "predicted_change_pct": 0.23647868102967262,
+          "predicted_direction": 1,
+          "confidence": 0.09340553018121822
+        }
+      }
+    },
+    {
+      "ticker": "DRREDDY.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1217.5,
+          "predicted_price": 1183.5436650683005,
+          "predicted_change": -33.95633493169953,
+          "predicted_change_pct": -2.7890213496262417,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1217.5,
+          "predicted_price": 1184.2363122934876,
+          "predicted_change": -33.26368770651243,
+          "predicted_change_pct": -2.7321304071057484,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1217.5,
+          "predicted_price": 1179.3660695050676,
+          "predicted_change": -38.13393049493243,
+          "predicted_change_pct": -3.1321503486597457,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1217.5,
+          "predicted_price": 1210.6061798279366,
+          "predicted_change": -6.893820172063442,
+          "predicted_change_pct": -0.5662275295329366,
+          "predicted_direction": 0,
+          "confidence": 0.17061724868879102
+        }
+      }
+    },
+    {
+      "ticker": "GRASIM.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 2787.60009765625,
+          "predicted_price": 2708.727204680821,
+          "predicted_change": -78.87289297542884,
+          "predicted_change_pct": -2.8294192212772296,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 2787.60009765625,
+          "predicted_price": 2681.9624221350095,
+          "predicted_change": -105.63767552124045,
+          "predicted_change_pct": -3.789556314410314,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 2787.60009765625,
+          "predicted_price": 2651.632039282813,
+          "predicted_change": -135.9680583734371,
+          "predicted_change_pct": -4.877602726723818,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 2787.60009765625,
+          "predicted_price": 2798.9982425646585,
+          "predicted_change": 11.39814490840854,
+          "predicted_change_pct": 0.40888737656423757,
+          "predicted_direction": 1,
+          "confidence": 0.3470063777225907
+        }
+      }
+    },
+    {
+      "ticker": "HCLTECH.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1703.0999755859375,
+          "predicted_price": 1647.9891283303116,
+          "predicted_change": -55.11084725562591,
+          "predicted_change_pct": -3.235913806919377,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1703.0999755859375,
+          "predicted_price": 1673.9226415053165,
+          "predicted_change": -29.177334080620994,
+          "predicted_change_pct": -1.7131897421689968,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1703.0999755859375,
+          "predicted_price": 1682.99934181515,
+          "predicted_change": -20.100633770787454,
+          "predicted_change_pct": -1.1802380399818846,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1703.0999755859375,
+          "predicted_price": 1700.3216079839312,
+          "predicted_change": -2.7783676020062558,
+          "predicted_change_pct": -0.16313590757056629,
+          "predicted_direction": 0,
+          "confidence": 0.09292874646830462
+        }
+      }
+    },
+    {
+      "ticker": "HDFCBANK.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 918.7000122070312,
+          "predicted_price": 937.290224372322,
+          "predicted_change": 18.590212165290723,
+          "predicted_change_pct": 2.023534550808459,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 918.7000122070312,
+          "predicted_price": 918.2549228530734,
+          "predicted_change": -0.44508935395788285,
+          "predicted_change_pct": -0.0484477357182822,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 918.7000122070312,
+          "predicted_price": 923.3739226480684,
+          "predicted_change": 4.673910441037151,
+          "predicted_change_pct": 0.508752626421427,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 918.7000122070312,
+          "predicted_price": 914.6514002960722,
+          "predicted_change": -4.048611910959039,
+          "predicted_change_pct": -0.4406892192406642,
+          "predicted_direction": 0,
+          "confidence": 0.14370724687553427
+        }
+      }
+    },
+    {
+      "ticker": "HEROMOTOCO.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 5488.5,
+          "predicted_price": 5182.517436399547,
+          "predicted_change": -305.98256360045343,
+          "predicted_change_pct": -5.574976106412565,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 5488.5,
+          "predicted_price": 5360.503102381816,
+          "predicted_change": -127.99689761818445,
+          "predicted_change_pct": -2.3320925137685022,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 5488.5,
+          "predicted_price": 5267.399984197298,
+          "predicted_change": -221.10001580270182,
+          "predicted_change_pct": -4.028423354335464,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 5488.5,
+          "predicted_price": 5481.291688923909,
+          "predicted_change": -7.208311076091377,
+          "predicted_change_pct": -0.1313348105327794,
+          "predicted_direction": 0,
+          "confidence": 0.0549654355491187
+        }
+      }
+    },
+    {
+      "ticker": "HINDALCO.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 944.4500122070312,
+          "predicted_price": 805.7218328280942,
+          "predicted_change": -138.72817937893706,
+          "predicted_change_pct": -14.688779457448586,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 944.4500122070312,
+          "predicted_price": 850.5869306788936,
+          "predicted_change": -93.86308152813763,
+          "predicted_change_pct": -9.938385336963929,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 944.4500122070312,
+          "predicted_price": 824.0960997088769,
+          "predicted_change": -120.35391249815439,
+          "predicted_change_pct": -12.743280315800543,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 944.4500122070312,
+          "predicted_price": 940.0003982836702,
+          "predicted_change": -4.449613923361085,
+          "predicted_change_pct": -0.471132814426356,
+          "predicted_direction": 0,
+          "confidence": 0.1116867038924525
+        }
+      }
+    },
+    {
+      "ticker": "HINDUNILVR.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 2390.60009765625,
+          "predicted_price": 2339.5699573580932,
+          "predicted_change": -51.030140298156766,
+          "predicted_change_pct": -2.1346163395620565,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 2390.60009765625,
+          "predicted_price": 2351.156497193675,
+          "predicted_change": -39.44360046257498,
+          "predicted_change_pct": -1.6499455722956635,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 2390.60009765625,
+          "predicted_price": 2344.8936685848166,
+          "predicted_change": -45.70642907143338,
+          "predicted_change_pct": -1.911922831269186,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 2390.60009765625,
+          "predicted_price": 2354.313416451219,
+          "predicted_change": -36.28668120503107,
+          "predicted_change_pct": -1.5178900578397325,
+          "predicted_direction": 0,
+          "confidence": 0.6971711473545366
+        }
+      }
+    },
+    {
+      "ticker": "ICICIBANK.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1345.5,
+          "predicted_price": 1405.8586609436463,
+          "predicted_change": 60.35866094364633,
+          "predicted_change_pct": 4.485965138881176,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1345.5,
+          "predicted_price": 1362.3538069752396,
+          "predicted_change": 16.85380697523965,
+          "predicted_change_pct": 1.2526054979739687,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1345.5,
+          "predicted_price": 1373.0917091372396,
+          "predicted_change": 27.591709137239604,
+          "predicted_change_pct": 2.050665859326606,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1345.5,
+          "predicted_price": 1334.680769196741,
+          "predicted_change": -10.81923080325896,
+          "predicted_change_pct": -0.8041048534566331,
+          "predicted_direction": 0,
+          "confidence": 0.3616676427360701
+        }
+      }
+    },
+    {
+      "ticker": "INFY.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1663.5,
+          "predicted_price": 1624.7339318488157,
+          "predicted_change": -38.7660681511843,
+          "predicted_change_pct": -2.3303918335548124,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1663.5,
+          "predicted_price": 1604.5972854973006,
+          "predicted_change": -58.90271450269938,
+          "predicted_change_pct": -3.5408905622302034,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1663.5,
+          "predicted_price": 1624.5990493862191,
+          "predicted_change": -38.90095061378088,
+          "predicted_change_pct": -2.3385001871825017,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1663.5,
+          "predicted_price": 1675.9326335251262,
+          "predicted_change": 12.43263352512622,
+          "predicted_change_pct": 0.747378029764123,
+          "predicted_direction": 1,
+          "confidence": 0.41234451374071956
+        }
+      }
+    },
+    {
+      "ticker": "ITC.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 324.8500061035156,
+          "predicted_price": 369.9946799349291,
+          "predicted_change": 45.144673831413456,
+          "predicted_change_pct": 13.897082648361646,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 324.8500061035156,
+          "predicted_price": 344.1208311355731,
+          "predicted_change": 19.270825032057473,
+          "predicted_change_pct": 5.932222462669956,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 324.8500061035156,
+          "predicted_price": 342.7542519820954,
+          "predicted_change": 17.904245878579786,
+          "predicted_change_pct": 5.5115424171716,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 324.8500061035156,
+          "predicted_price": 339.187706958908,
+          "predicted_change": 14.33770085539237,
+          "predicted_change_pct": 4.413637243652557,
+          "predicted_direction": 1,
+          "confidence": 0.48897394199707245
+        }
+      }
+    },
+    {
+      "ticker": "JSWSTEEL.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1184.4000244140625,
+          "predicted_price": 1144.8287238392916,
+          "predicted_change": -39.57130057477093,
+          "predicted_change_pct": -3.3410418574034817,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1184.4000244140625,
+          "predicted_price": 1101.7974218490417,
+          "predicted_change": -82.60260256502079,
+          "predicted_change_pct": -6.974214865107364,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1184.4000244140625,
+          "predicted_price": 1099.209148640457,
+          "predicted_change": -85.19087577360551,
+          "predicted_change_pct": -7.192745188919636,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1184.4000244140625,
+          "predicted_price": 1191.917460326111,
+          "predicted_change": 7.517435912048541,
+          "predicted_change_pct": 0.6347041334930248,
+          "predicted_direction": 1,
+          "confidence": 0.17258132792388037
+        }
+      }
+    },
+    {
+      "ticker": "KOTAKBANK.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 426.0,
+          "predicted_price": 441.8896686898006,
+          "predicted_change": 15.889668689800601,
+          "predicted_change_pct": 3.72996917600954,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 426.0,
+          "predicted_price": 432.5340646703917,
+          "predicted_change": 6.534064670391672,
+          "predicted_change_pct": 1.5338179977445243,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 426.0,
+          "predicted_price": 429.29584689549483,
+          "predicted_change": 3.295846895494833,
+          "predicted_change_pct": 0.7736729801631093,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 426.0,
+          "predicted_price": 428.87550281500563,
+          "predicted_change": 2.875502815005632,
+          "predicted_change_pct": 0.6750006607994408,
+          "predicted_direction": 1,
+          "confidence": 0.4796488741402458
+        }
+      }
+    },
+    {
+      "ticker": "LT.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 3793.800048828125,
+          "predicted_price": 3476.627686881984,
+          "predicted_change": -317.1723619461409,
+          "predicted_change_pct": -8.36028145563741,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 3793.800048828125,
+          "predicted_price": 3468.799766919372,
+          "predicted_change": -325.0002819087531,
+          "predicted_change_pct": -8.566615997834237,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 3793.800048828125,
+          "predicted_price": 3545.557420349971,
+          "predicted_change": -248.24262847815407,
+          "predicted_change_pct": -6.543376701016024,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 3793.800048828125,
+          "predicted_price": 3795.593254166471,
+          "predicted_change": 1.7932053383460698,
+          "predicted_change_pct": 0.04726673296606698,
+          "predicted_direction": 1,
+          "confidence": 0.01673603672331403
+        }
+      }
+    },
+    {
+      "ticker": "M&M.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 3573.699951171875,
+          "predicted_price": 3384.0016247949534,
+          "predicted_change": -189.6983263769216,
+          "predicted_change_pct": -5.308177210420717,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 3573.699951171875,
+          "predicted_price": 3204.2875911646406,
+          "predicted_change": -369.4123600072344,
+          "predicted_change_pct": -10.336971907395242,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 3573.699951171875,
+          "predicted_price": 3152.706720117043,
+          "predicted_change": -420.993231054832,
+          "predicted_change_pct": -11.78031834812493,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 3573.699951171875,
+          "predicted_price": 3606.8233744243703,
+          "predicted_change": 33.123423252495286,
+          "predicted_change_pct": 0.9268663767262764,
+          "predicted_direction": 1,
+          "confidence": 0.5083863330430491
+        }
+      }
+    },
+    {
+      "ticker": "MARUTI.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 15765.0,
+          "predicted_price": 13842.529947276693,
+          "predicted_change": -1922.4700527233072,
+          "predicted_change_pct": -12.194545212326723,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 15765.0,
+          "predicted_price": 15089.837285830406,
+          "predicted_change": -675.1627141695935,
+          "predicted_change_pct": -4.282668659496314,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 15765.0,
+          "predicted_price": 14692.640052989242,
+          "predicted_change": -1072.3599470107583,
+          "predicted_change_pct": -6.802156340061893,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 15765.0,
+          "predicted_price": 15778.591837014352,
+          "predicted_change": 13.591837014351768,
+          "predicted_change_pct": 0.0862152680897621,
+          "predicted_direction": 1,
+          "confidence": 0.03935641362581688
+        }
+      }
+    },
+    {
+      "ticker": "NESTLEIND.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1306.0,
+          "predicted_price": 1300.4811744676078,
+          "predicted_change": -5.518825532392157,
+          "predicted_change_pct": -0.42257469620153865,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1306.0,
+          "predicted_price": 1276.5723773484494,
+          "predicted_change": -29.427622651550564,
+          "predicted_change_pct": -2.2532636027221,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1306.0,
+          "predicted_price": 1277.9282241033723,
+          "predicted_change": -28.07177589662774,
+          "predicted_change_pct": -2.1494468527280097,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1306.0,
+          "predicted_price": 1303.063241622705,
+          "predicted_change": -2.936758377295064,
+          "predicted_change_pct": -0.22486664450958038,
+          "predicted_direction": 0,
+          "confidence": 0.1003052409777333
+        }
+      }
+    },
+    {
+      "ticker": "NTPC.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 342.45001220703125,
+          "predicted_price": 338.29498818476713,
+          "predicted_change": -4.155024022264115,
+          "predicted_change_pct": -1.2133227841008676,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 342.45001220703125,
+          "predicted_price": 345.45533978104504,
+          "predicted_change": 3.0053275740137906,
+          "predicted_change_pct": 0.8775959897460606,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 342.45001220703125,
+          "predicted_price": 342.98184868882163,
+          "predicted_change": 0.5318364817903785,
+          "predicted_change_pct": 0.15530339110305658,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 342.45001220703125,
+          "predicted_price": 343.8774553800134,
+          "predicted_change": 1.427443172982123,
+          "predicted_change_pct": 0.4168325659510197,
+          "predicted_direction": 1,
+          "confidence": 0.12310154248668637
+        }
+      }
+    },
+    {
+      "ticker": "ONGC.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 244.00999450683594,
+          "predicted_price": 231.47972591707367,
+          "predicted_change": -12.530268589762272,
+          "predicted_change_pct": -5.135145638229677,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 244.00999450683594,
+          "predicted_price": 236.1174515217608,
+          "predicted_change": -7.892542985075124,
+          "predicted_change_pct": -3.2345162750511913,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 244.00999450683594,
+          "predicted_price": 236.41792140051666,
+          "predicted_change": -7.592073106319276,
+          "predicted_change_pct": -3.111377925999903,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 244.00999450683594,
+          "predicted_price": 241.84139078791745,
+          "predicted_change": -2.16860371891849,
+          "predicted_change_pct": -0.8887356123676082,
+          "predicted_direction": 0,
+          "confidence": 0.428949245261497
+        }
+      }
+    },
+    {
+      "ticker": "POWERGRID.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 259.25,
+          "predicted_price": 274.19387451541115,
+          "predicted_change": 14.943874515411153,
+          "predicted_change_pct": 5.764271751364003,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 259.25,
+          "predicted_price": 265.82430604001,
+          "predicted_change": 6.574306040010015,
+          "predicted_change_pct": 2.535894325944077,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 259.25,
+          "predicted_price": 266.15150879436897,
+          "predicted_change": 6.901508794368965,
+          "predicted_change_pct": 2.6621056101712393,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 259.25,
+          "predicted_price": 261.164587491709,
+          "predicted_change": 1.9145874917090282,
+          "predicted_change_pct": 0.7385101221635493,
+          "predicted_direction": 1,
+          "confidence": 0.4258476597059009
+        }
+      }
+    },
+    {
+      "ticker": "RELIANCE.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1402.5,
+          "predicted_price": 1449.1101299795228,
+          "predicted_change": 46.61012997952275,
+          "predicted_change_pct": 3.3233604263474437,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1402.5,
+          "predicted_price": 1423.9802232237853,
+          "predicted_change": 21.480223223785288,
+          "predicted_change_pct": 1.5315667182734582,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1402.5,
+          "predicted_price": 1408.7862989176538,
+          "predicted_change": 6.286298917653767,
+          "predicted_change_pct": 0.44822095669545536,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1402.5,
+          "predicted_price": 1410.6081108405301,
+          "predicted_change": 8.108110840530117,
+          "predicted_change_pct": 0.5781184200021494,
+          "predicted_direction": 1,
+          "confidence": 0.1465494274140413
+        }
+      }
+    },
+    {
+      "ticker": "SBIN.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1048.3499755859375,
+          "predicted_price": 898.2481806157775,
+          "predicted_change": -150.10179497015997,
+          "predicted_change_pct": -14.31790894889524,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1048.3499755859375,
+          "predicted_price": 933.816877429781,
+          "predicted_change": -114.53309815615648,
+          "predicted_change_pct": -10.925082350685644,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1048.3499755859375,
+          "predicted_price": 949.8049654070892,
+          "predicted_change": -98.54501017884832,
+          "predicted_change_pct": -9.40001072864719,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1048.3499755859375,
+          "predicted_price": 1049.3765478458356,
+          "predicted_change": 1.0265722598981029,
+          "predicted_change_pct": 0.09792266741117661,
+          "predicted_direction": 1,
+          "confidence": 0.03529948737968436
+        }
+      }
+    },
+    {
+      "ticker": "SUNPHARMA.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1634.199951171875,
+          "predicted_price": 1704.543504183297,
+          "predicted_change": 70.34355301142205,
+          "predicted_change_pct": 4.304464270787611,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1634.199951171875,
+          "predicted_price": 1709.5238896315677,
+          "predicted_change": 75.32393845969273,
+          "predicted_change_pct": 4.609224128643397,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1634.199951171875,
+          "predicted_price": 1696.3610017607498,
+          "predicted_change": 62.16105058887479,
+          "predicted_change_pct": 3.803760399350131,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1634.199951171875,
+          "predicted_price": 1611.6230834109906,
+          "predicted_change": -22.576867760884397,
+          "predicted_change_pct": -1.381524197494599,
+          "predicted_direction": 0,
+          "confidence": 0.5021030116267566
+        }
+      }
+    },
+    {
+      "ticker": "TATASTEEL.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 189.10000610351562,
+          "predicted_price": 179.58052158492865,
+          "predicted_change": -9.519484518586978,
+          "predicted_change_pct": -5.034100587694268,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 189.10000610351562,
+          "predicted_price": 174.7797272173175,
+          "predicted_change": -14.320278886198139,
+          "predicted_change_pct": -7.572860086719957,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 189.10000610351562,
+          "predicted_price": 171.76114400948154,
+          "predicted_change": -17.338862094034084,
+          "predicted_change_pct": -9.16914941004422,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 189.10000610351562,
+          "predicted_price": 188.58856759799784,
+          "predicted_change": -0.5114385055177877,
+          "predicted_change_pct": -0.27045927499220745,
+          "predicted_direction": 0,
+          "confidence": 0.06513253824328558
+        }
+      }
+    },
+    {
+      "ticker": "TCS.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 3150.39990234375,
+          "predicted_price": 3109.0104699603976,
+          "predicted_change": -41.389432383352414,
+          "predicted_change_pct": -1.3137834454781672,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 3150.39990234375,
+          "predicted_price": 3118.40841443212,
+          "predicted_change": -31.991487911629974,
+          "predicted_change_pct": -1.015473873263828,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 3150.39990234375,
+          "predicted_price": 3137.3320751743663,
+          "predicted_change": -13.06782716938369,
+          "predicted_change_pct": -0.41479899614210725,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 3150.39990234375,
+          "predicted_price": 3171.432817369497,
+          "predicted_change": 21.032915025747116,
+          "predicted_change_pct": 0.6676268308064559,
+          "predicted_direction": 1,
+          "confidence": 0.49632304517350767
+        }
+      }
+    },
+    {
+      "ticker": "TECHM.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 1687.4000244140625,
+          "predicted_price": 1601.3989877397544,
+          "predicted_change": -86.00103667430812,
+          "predicted_change_pct": -5.096659679388793,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 1687.4000244140625,
+          "predicted_price": 1628.2583279459504,
+          "predicted_change": -59.14169646811206,
+          "predicted_change_pct": -3.504900771152264,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 1687.4000244140625,
+          "predicted_price": 1595.268351998966,
+          "predicted_change": -92.13167241509655,
+          "predicted_change_pct": -5.459978136902577,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 1687.4000244140625,
+          "predicted_price": 1681.4716491245472,
+          "predicted_change": -5.928375289515316,
+          "predicted_change_pct": -0.3513319428553374,
+          "predicted_direction": 0,
+          "confidence": 0.15260668254477938
+        }
+      }
+    },
+    {
+      "ticker": "ULTRACEMCO.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 12364.0,
+          "predicted_price": 11976.48455331067,
+          "predicted_change": -387.5154466893291,
+          "predicted_change_pct": -3.134223929871638,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 12364.0,
+          "predicted_price": 11860.580588977668,
+          "predicted_change": -503.4194110223325,
+          "predicted_change_pct": -4.071654893419064,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 12364.0,
+          "predicted_price": 11937.193164056865,
+          "predicted_change": -426.8068359431345,
+          "predicted_change_pct": -3.452012584464048,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 12364.0,
+          "predicted_price": 12425.848642973118,
+          "predicted_change": 61.84864297311833,
+          "predicted_change_pct": 0.5002316642924498,
+          "predicted_direction": 1,
+          "confidence": 0.21751765250813326
+        }
+      }
+    },
+    {
+      "ticker": "VEDL.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 678.6500244140625,
+          "predicted_price": 546.4524858232197,
+          "predicted_change": -132.19753859084278,
+          "predicted_change_pct": -19.47948630886448,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 678.6500244140625,
+          "predicted_price": 582.9407347791338,
+          "predicted_change": -95.70928963492872,
+          "predicted_change_pct": -14.102893419559347,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 678.6500244140625,
+          "predicted_price": 560.7978947713453,
+          "predicted_change": -117.85212964271716,
+          "predicted_change_pct": -17.365670876453464,
+          "predicted_direction": 0,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 678.6500244140625,
+          "predicted_price": 658.7133158017554,
+          "predicted_change": -19.936708612307143,
+          "predicted_change_pct": -2.9377010086340527,
+          "predicted_direction": 0,
+          "confidence": 0.4580507190540615
+        }
+      }
+    },
+    {
+      "ticker": "WIPRO.NS",
+      "prediction_date": "2026-01-23",
+      "target_date": "2026-01-24",
+      "models": {
+        "baseline": {
+          "current_price": 240.64999389648438,
+          "predicted_price": 247.2279531525901,
+          "predicted_change": 6.577959256105714,
+          "predicted_change_pct": 2.733413431514653,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstm": {
+          "current_price": 240.64999389648438,
+          "predicted_price": 245.2481318762475,
+          "predicted_change": 4.598137979763123,
+          "predicted_change_pct": 1.9107160176122795,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "mslstma": {
+          "current_price": 240.64999389648438,
+          "predicted_price": 241.65389595909346,
+          "predicted_change": 1.003902062609086,
+          "predicted_change_pct": 0.4171627209934359,
+          "predicted_direction": 1,
+          "confidence": 0.5
+        },
+        "ensemble": {
+          "current_price": 240.64999389648438,
+          "predicted_price": 243.71390208850096,
+          "predicted_change": 3.0639081920165836,
+          "predicted_change_pct": 1.2731802492106148,
+          "predicted_direction": 1,
+          "confidence": 0.3857220024131114
+        }
+      }
+    }
+  ],
+  "date": "2026-01-23"
+}
