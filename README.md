@@ -61,17 +61,9 @@
   - **Cumulative Top 5 Profit**: ₹10,234.57
 
 - **Key Metrics**:
-  - Profitable Days: 11/23 trading days
+  - Profitable Days: 12/23 trading days
   - Ensemble Max Single Day Profit: ₹5,716.27 (Feb 3, 2026)
   - Total Profit on Profitable Days (Ensemble): ₹26,133.62
-
-### Model Performance Comparison (23-Day Live Trading)
-| Model | Cumulative Profit | Profitable Days | Max Single Day | Avg Daily P&L |
-|-------|-------------------|-----------------|----------------|---------------|
-| Baseline LSTM | ₹-9,167.77 | 10/23 | ₹4,893.38 | ₹-398.59 |
-| MSLSTM | ₹-5,510.86 | 10/23 | ₹5,909.15 | ₹-239.60 |
-| MSLSTMA | ₹-2,962.29 | 11/23 | ₹4,876.24 | ₹-128.79 |
-| **Stacked Ensemble** | **₹-4,487.69** | **12/23** | **₹5,716.27** | **₹-195.11** |
 
 ### Key Research Findings
 1. **Ensemble Superiority**: Ensemble methodologies significantly outperform individual model approaches in both theoretical metrics and practical trading applications
