@@ -79,7 +79,7 @@ class ModelPredictor:
         """Load pre-trained models"""
         model_dir = model_dir or PATHS['models']
         
-        print(f"\n📂 Loading trained models from {model_dir}...")
+        print(f"\n Loading trained models from {model_dir}...")
         
         model_types = ['baseline', 'mslstm', 'mslstma', 'ensemble']
         
@@ -100,22 +100,22 @@ class ModelPredictor:
                 if os.path.exists(model_path):
                     trainer.model.load(model_path)
                     self.models[model_type] = trainer
-                    print(f"✅ {model_type} loaded")
+                    print(f" {model_type} loaded")
                 else:
                     print(f"⚠️  {model_type} model file not found, training new model...")
                     trainer.train(epochs=50)
                     trainer.save_model()
                     self.models[model_type] = trainer
-                    print(f"✅ {model_type} trained and saved")
+                    print(f" {model_type} trained and saved")
                     
             except Exception as e:
-                print(f"❌ Failed to load {model_type}: {e}")
+                print(f" Failed to load {model_type}: {e}")
         
-        print(f"\n✅ Loaded {len(self.models)} models")
+        print(f"\n Loaded {len(self.models)} models")
     
     def download_latest_data(self, days=365):
         """Download latest data for predictions"""
-        print(f"\n📈 Downloading latest {days} days of data...")
+        print(f"\n Downloading latest {days} days of data...")
         
         end_date = datetime.now()
         start_date = end_date - timedelta(days=days)
@@ -127,7 +127,7 @@ class ModelPredictor:
             progress=False
         ).dropna()
         
-        print(f"✅ Downloaded {len(self.data)} trading days")
+        print(f" Downloaded {len(self.data)} trading days")
         return self.data
     
     def generate_predictions(self, confidence_level=0.95):
@@ -135,7 +135,7 @@ class ModelPredictor:
         print(f"\n🔮 Generating NEXT-DAY predictions...")
         
         if not self.models:
-            print("❌ No models loaded. Please load models first.")
+            print(" No models loaded. Please load models first.")
             return None
         
         # Get latest features
@@ -233,15 +233,15 @@ class ModelPredictor:
                 else:
                     next_day_price_scalar = float(next_day_price)
                 
-                print(f"✅ {model_type}: ₹{float(next_day_price_scalar):.2f} ({float(price_change_pct):+.2f}%)")
+                print(f" {model_type}: ₹{float(next_day_price_scalar):.2f} ({float(price_change_pct):+.2f}%)")
                 
             except Exception as e:
-                print(f"❌ Error generating {model_type} predictions: {e}")
+                print(f" Error generating {model_type} predictions: {e}")
         
         # Create ensemble of all predictions
         # self._create_next_day_meta_ensemble()  # Removed: Not needed
         
-        print(f"\n✅ All next-day predictions generated!")
+        print(f"\n All next-day predictions generated!")
         
         # Print summary
         self._print_prediction_summary()
@@ -344,7 +344,7 @@ class ModelPredictor:
                 print(f"  ✗ {model_type}: Invalid prediction (NaN/Inf)")
         
         if len(valid_predictions) == 0:
-            print("❌ No valid predictions available for ensemble")
+            print(" No valid predictions available for ensemble")
             return
         
         # Weight models based on their type (ensemble gets higher weight)
@@ -373,7 +373,7 @@ class ModelPredictor:
             current_price = current_price.iloc[0] if len(current_price) > 0 else float(current_price)
         
         if np.isnan(current_price) or np.isinf(current_price):
-            print(f"❌ Invalid current price: {current_price}")
+            print(f" Invalid current price: {current_price}")
             return
         
         for model_type, weight in normalized_weights.items():
@@ -403,7 +403,7 @@ class ModelPredictor:
         
         # Ensure ensemble values are valid
         if np.isnan(ensemble_price) or np.isinf(ensemble_price):
-            print("❌ Ensemble price calculation resulted in NaN/Inf")
+            print(" Ensemble price calculation resulted in NaN/Inf")
             return
         
         price_change = ensemble_price - current_price
@@ -419,7 +419,7 @@ class ModelPredictor:
             'weights': normalized_weights
         }
         
-        print(f"✅ Meta-ensemble: ₹{ensemble_price:.2f} ({price_change_pct:+.2f}%)")
+        print(f" Meta-ensemble: ₹{ensemble_price:.2f} ({price_change_pct:+.2f}%)")
     
     def _print_prediction_summary(self):
         """Print comprehensive prediction summary"""
@@ -606,12 +606,12 @@ class ModelPredictor:
             'weights': normalized_weights
         }
         
-        print(f"✅ Meta-ensemble created with weights: {normalized_weights}")
+        print(f" Meta-ensemble created with weights: {normalized_weights}")
     
     def create_prediction_dashboard(self, save_path=None):
         """Create comprehensive prediction dashboard"""
         if not self.predictions:
-            print("❌ No predictions available. Please generate predictions first.")
+            print(" No predictions available. Please generate predictions first.")
             return
         
         print("📊 Creating prediction dashboard...")
@@ -853,7 +853,7 @@ class ModelPredictor:
     def export_predictions(self, filename=None):
         """Export next-day predictions to CSV"""
         if not self.predictions:
-            print("❌ No predictions available.")
+            print(" No predictions available.")
             return
         
         if filename is None:
@@ -888,7 +888,7 @@ class ModelPredictor:
         export_path = os.path.join(PATHS['results'], filename)
         export_df.to_csv(export_path, index=False)
         
-        print(f"✅ Next-day predictions exported to: {export_path}")
+        print(f" Next-day predictions exported to: {export_path}")
         
         return export_df
     
@@ -909,9 +909,9 @@ class ModelPredictor:
                     trainer.train(epochs=50)
                     trainer.save_model()
                     self.models[model_type] = trainer
-                    print(f"✅ {model_type} retrained")
+                    print(f" {model_type} retrained")
                 except Exception as e:
-                    print(f"❌ Failed to retrain {model_type}: {e}")
+                    print(f" Failed to retrain {model_type}: {e}")
         else:
             self.load_trained_models()
         
@@ -954,7 +954,7 @@ def run_portfolio_predictions(tickers=None, prediction_days=1):
             predictors[ticker] = predictor
             
         except Exception as e:
-            print(f"❌ Error processing {ticker}: {e}")
+            print(f" Error processing {ticker}: {e}")
     
     # Create portfolio summary
     create_portfolio_summary(predictors)
@@ -1023,7 +1023,7 @@ def create_portfolio_summary(predictors):
         
         if len(bullish_stocks) > 0:
             top_bullish = bullish_stocks.iloc[0]
-            print(f"📈 MOST BULLISH: {top_bullish['Ticker']} ({top_bullish['Change_Pct']:+.2f}%, {top_bullish['Confidence']:.1f}% confidence)")
+            print(f" MOST BULLISH: {top_bullish['Ticker']} ({top_bullish['Change_Pct']:+.2f}%, {top_bullish['Confidence']:.1f}% confidence)")
         
         if len(bearish_stocks) > 0:
             top_bearish = bearish_stocks.iloc[0]
@@ -1035,7 +1035,7 @@ def create_portfolio_summary(predictors):
             for _, stock in high_confidence.iterrows():
                 print(f"   • {stock['Ticker']}: {stock['Direction']} {stock['Change_Pct']:+.2f}% ({stock['Confidence']:.1f}% confidence)")
     
-    print(f"\n✅ Portfolio analysis complete!")
+    print(f"\n Portfolio analysis complete!")
 
 
 if __name__ == "__main__":

@@ -9,11 +9,11 @@ if [ ! -d ".git" ]; then
     git init
     git branch -M main
 else
-    echo "✅ Git repository already initialized"
+    echo " Git repository already initialized"
 fi
 
 # Create required directories
-echo "📂 Creating directory structure..."
+echo " Creating directory structure..."
 mkdir -p trading_results
 mkdir -p logs
 mkdir -p results
@@ -24,9 +24,9 @@ mkdir -p data
 if [ ! -d "venv" ]; then
     echo "🐍 Creating Python virtual environment..."
     python3 -m venv venv
-    echo "✅ Virtual environment created. Activate with: source venv/bin/activate"
+    echo " Virtual environment created. Activate with: source venv/bin/activate"
 else
-    echo "✅ Virtual environment already exists"
+    echo " Virtual environment already exists"
 fi
 
 # Install dependencies
@@ -49,14 +49,14 @@ import pandas as pd
 import numpy as np
 import yfinance as yf
 from datetime import datetime
-print('✅ All basic imports working')
+print(' All basic imports working')
 
 # Test yfinance
 try:
     data = yf.download('TCS.NS', period='5d', progress=False)
-    print(f'✅ Yahoo Finance connection working - Got {len(data)} days of TCS data')
+    print(f' Yahoo Finance connection working - Got {len(data)} days of TCS data')
 except Exception as e:
-    print(f'❌ Yahoo Finance test failed: {e}')
+    print(f' Yahoo Finance test failed: {e}')
 
 print('🎯 Basic setup complete!')
 "
@@ -95,4 +95,4 @@ echo "- Daily automation: 6:30 PM IST (1:00 PM UTC)"
 echo "- Investment per stock: ₹25,000"
 echo "- Results saved in: trading_results/"
 echo ""
-echo "✅ Repository ready for daily automated trading simulation!"
+echo " Repository ready for daily automated trading simulation!"

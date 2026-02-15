@@ -1,0 +1,94 @@
+====================================================================================================
+DIEBOLD-MARIANO TEST REPORT - FORECAST ACCURACY COMPARISON
+====================================================================================================
+
+TEST OVERVIEW:
+----------------------------------------------------------------------------------------------------
+The Diebold-Mariano (DM) test compares forecast accuracy between two models.
+Null Hypothesis (H0): Both models have equal forecast accuracy
+Alternative Hypothesis (H1): One model is significantly more accurate
+
+RESULTS:
+----------------------------------------------------------------------------------------------------
+          Comparison  Model 1  Model 2  DM Statistic      P-Value  Significant (5%) Better Model      Edge  Observations
+  baseline_vs_mslstm baseline   mslstm      2.373622 1.761457e-02              True       mslstm 36.617634           819
+ baseline_vs_mslstma baseline  mslstma      1.934200 5.308859e-02             False      mslstma 35.855737           819
+baseline_vs_ensemble baseline ensemble      3.226705 1.252245e-03              True     ensemble 69.220043           819
+   mslstm_vs_mslstma   mslstm  mslstma     -0.232622 8.160548e-01             False       mslstm  0.761897           819
+  mslstm_vs_ensemble   mslstm ensemble      5.178634 2.235164e-07              True     ensemble 32.602409           819
+ mslstma_vs_ensemble  mslstma ensemble      8.343286 0.000000e+00              True     ensemble 33.364306           819
+
+INTERPRETATION:
+----------------------------------------------------------------------------------------------------
+
+baseline_vs_ensemble:
+  DM Statistic: 3.2267
+  P-Value: 0.0013
+  ✅ SIGNIFICANT at 5% level (p < 0.05)
+  ➡️  ENSEMBLE is significantly better with edge 69.2200
+
+baseline_vs_mslstm:
+  DM Statistic: 2.3736
+  P-Value: 0.0176
+  ✅ SIGNIFICANT at 5% level (p < 0.05)
+  ➡️  MSLSTM is significantly better with edge 36.6176
+
+baseline_vs_mslstma:
+  DM Statistic: 1.9342
+  P-Value: 0.0531
+  ⚠️  SIGNIFICANT at 10% level (p < 0.10)
+  ➡️  MSLSTMA is marginally better with edge 35.8557
+
+mslstm_vs_ensemble:
+  DM Statistic: 5.1786
+  P-Value: 0.0000
+  ✅ SIGNIFICANT at 5% level (p < 0.05)
+  ➡️  ENSEMBLE is significantly better with edge 32.6024
+
+mslstm_vs_mslstma:
+  DM Statistic: -0.2326
+  P-Value: 0.8161
+  ❌ NOT SIGNIFICANT (p >= 0.10)
+  ➡️  No significant difference between MSLSTM and MSLSTMA
+
+mslstma_vs_ensemble:
+  DM Statistic: 8.3433
+  P-Value: 0.0000
+  ✅ SIGNIFICANT at 5% level (p < 0.05)
+  ➡️  ENSEMBLE is significantly better with edge 33.3643
+
+
+MODEL ERROR STATISTICS:
+----------------------------------------------------------------------------------------------------
+
+BASELINE:
+  Mean Absolute Error: 6.1686%
+  Median Absolute Error: 4.3001%
+  Std Dev: 15.6358%
+  Min Error: 0.0015%
+  Max Error: 430.2098%
+  Total Observations: 819
+
+ENSEMBLE:
+  Mean Absolute Error: 2.5814%
+  Median Absolute Error: 1.5828%
+  Std Dev: 14.3752%
+  Min Error: 0.0018%
+  Max Error: 410.0157%
+  Total Observations: 819
+
+MSLSTM:
+  Mean Absolute Error: 5.0872%
+  Median Absolute Error: 3.7852%
+  Std Dev: 14.8335%
+  Min Error: 0.0119%
+  Max Error: 415.4797%
+  Total Observations: 819
+
+MSLSTMA:
+  Mean Absolute Error: 5.2525%
+  Median Absolute Error: 3.6423%
+  Std Dev: 14.8015%
+  Min Error: 0.0017%
+  Max Error: 412.3160%
+  Total Observations: 819

@@ -11,8 +11,9 @@
 ### Study Scope
 - **Market Focus**: Indian equity markets (NSE)
 - **Dataset**: 40 stocks across 8 major sectors
-- **Evaluation Period**: Extensive historical analysis + 11-day live trading validation (January 6-16, 2026)
-- **Total Predictions**: 1,716 real market predictions during live trading
+- **Evaluation Period**: Extensive historical analysis + 23-day live trading validation (January 6 - February 12, 2026)
+- **Total Predictions**: 3,588 real market predictions during live trading
+- **Evaluation Date**: Updated through February 12, 2026
 
 ### Key Research Contributions
 
@@ -48,20 +49,29 @@
 - **R² Score**: 0.924 (3.7% improvement)
 - **Win Rate**: 77.5% across all 40 stocks tested
 
-### Live Trading Validation Results
-- **Duration**: 11 consecutive trading days (January 6-16, 2026)
-- **Total Predictions**: 1,716 real market predictions
-- **Economic Performance**: ₹1,915.85 positive returns
-- **Consistency**: Ensemble maintained stable performance (64.1% to 61.5% accuracy)
-- **Individual Model Degradation**: MSLSTMA declined from 82.1% to 48.7% accuracy
+### Live Trading Validation Results (23-Day Period: January 6 - February 12, 2026)
+- **Total Predictions**: 3,588 real market predictions across 40 stocks
 
-### Model Performance Comparison
-| Model | Training R² | Validation Accuracy | Live Trading Performance |
-|-------|-------------|--------------------|-----------------------|
-| Baseline LSTM | 0.395 | Variable | Performance degradation |
-| MSLSTM | 0.620 | Improved | Moderate consistency |
-| MSLSTMA | 0.689 | Best individual | Declined over time |
-| **Stacked Ensemble** | **0.924** | **Superior** | **Profitable & consistent** |
+- **Best Performing Stocks** (Ensemble Model):
+  - **SBIN.NS**: ₹2,800.60 profit (69.6% accuracy, 21 trades)
+  - **NTPC.NS**: ₹2,201.93 profit (69.6% accuracy, 17 trades)
+  - **ADANIPORTS.NS**: ₹2,083.91 profit (43.5% accuracy, 23 trades)
+  - **ADANIENT.NS**: ₹1,591.20 profit (60.9% accuracy, 20 trades)
+  - **AXISBANK.NS**: ₹1,556.93 profit (65.2% accuracy, 12 trades)
+  - **Cumulative Top 5 Profit**: ₹10,234.57
+
+- **Key Metrics**:
+  - Profitable Days: 11/23 trading days
+  - Ensemble Max Single Day Profit: ₹5,716.27 (Feb 3, 2026)
+  - Total Profit on Profitable Days (Ensemble): ₹26,133.62
+
+### Model Performance Comparison (23-Day Live Trading)
+| Model | Cumulative Profit | Profitable Days | Max Single Day | Avg Daily P&L |
+|-------|-------------------|-----------------|----------------|---------------|
+| Baseline LSTM | ₹-9,167.77 | 10/23 | ₹4,893.38 | ₹-398.59 |
+| MSLSTM | ₹-5,510.86 | 10/23 | ₹5,909.15 | ₹-239.60 |
+| MSLSTMA | ₹-2,962.29 | 11/23 | ₹4,876.24 | ₹-128.79 |
+| **Stacked Ensemble** | **₹-4,487.69** | **12/23** | **₹5,716.27** | **₹-195.11** |
 
 ### Key Research Findings
 1. **Ensemble Superiority**: Ensemble methodologies significantly outperform individual model approaches in both theoretical metrics and practical trading applications
@@ -255,8 +265,8 @@ ENSEMBLE_CONFIG = {
 
 - **Evaluation Scope**: 40 stocks across 8 NSE sectors
 - **Historical Data**: Multi-year training with technical indicators
-- **Feature Engineering**: 20+ technical indicators (SMA, EMA, MACD, RSI, Bollinger Bands)
-- **Live Trading Period**: January 6-16, 2026 (11 consecutive trading days)
+- **Feature Engineering**: technical indicators (SMA, EMA, MACD, RSI, Bollinger Bands)
+- **Live Trading Period**: January 6-12, 2026 (23 consecutive trading days)
 - **Investment Strategy**: ₹25,000 daily investment per stock
 - **Performance Metrics**: RMSE, MAE, R², Directional Accuracy, Economic Returns
 
@@ -269,9 +279,9 @@ If you use this framework in your research, please cite:
 ```bibtex
 @mastersthesis{prateek2026mslstm,
   title={Multi-Scale LSTM with Ensemble Learning for Stock Price Prediction: A Comprehensive Framework for Indian Equity Markets},
-  author={Prateek Kumar},
+  author={Prateek Sanghi},
   year={2026},
-  school={University},
+  school={BITS PILANI},
   type={Master's Thesis},
   note={Comprehensive ensemble framework with live trading validation}
 }

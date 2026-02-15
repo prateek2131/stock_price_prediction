@@ -206,7 +206,7 @@ if __name__ == "__main__":
     print("\n=== Testing Latest Price Fetch ===")
     result = fetch_latest_price('TCS.NS')
     if result:
-        print(f"✅ {result['ticker']}: ₹{result['close']:.2f} on {result['date']}")
+        print(f" {result['ticker']}: ₹{result['close']:.2f} on {result['date']}")
     
     # Test historical data
     print("\n=== Testing Historical Data Fetch ===")
@@ -216,5 +216,5 @@ if __name__ == "__main__":
         '2025-12-30'
     )
     if data is not None:
-        print(f"✅ Fetched {len(data)} records")
+        print(f" Fetched {len(data)} records")
         print(data.head())

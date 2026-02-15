@@ -1324,7 +1324,7 @@ class PaperModelTrainer:
         print(f"     Precision: {precision:.2f}%")
         print(f"     Recall: {recall:.2f}%")
         print(f"     F1-Score: {f1:.2f}%")
-        print(f"\n  📈 REGRESSION METRICS:")
+        print(f"\n   REGRESSION METRICS:")
         print(f"     RMSE: {rmse:.4f}")
         print(f"     MAE: {mae:.4f}")
         print(f"     MAPE: {mape:.2f}%")

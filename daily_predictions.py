@@ -42,8 +42,8 @@ class DailyPredictionAutomator:
     
     def run_daily_predictions(self):
         """Run predictions for all stocks"""
-        print(f"🚀 Running Daily Predictions for {self.tomorrow}")
-        print(f"📅 Prediction Date: {self.today}")
+        print(f" Running Daily Predictions for {self.tomorrow}")
+        print(f" Prediction Date: {self.today}")
         print("=" * 70)
         
         all_stocks = self.get_all_stocks()
@@ -65,17 +65,17 @@ class DailyPredictionAutomator:
             
             # Note: Daily summary will be created later with evaluation data
             
-            print(f"\n✅ Predictions completed for {len(result['predictions'])} stocks")
+            print(f"\n Predictions completed for {len(result['predictions'])} stocks")
             return True, result['predictions']
         else:
-            print("\n❌ No predictions generated")
+            print("\n No predictions generated")
             return False, []
     
     def run_trading_evaluation(self):
         """Evaluate yesterday's predictions if available"""
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
         
-        print(f"\n📊 Evaluating Trading Performance from {yesterday}")
+        print(f"\n Evaluating Trading Performance from {yesterday}")
         print("=" * 70)
         
         # Check if we have yesterday's predictions to evaluate
@@ -89,7 +89,7 @@ class DailyPredictionAutomator:
             eval_result = simulator.evaluate_previous_predictions()
             
             if eval_result['evaluated']:
-                print(f"✅ Evaluated {len(eval_result['evaluated'])} predictions")
+                print(f" Evaluated {len(eval_result['evaluated'])} predictions")
                 return True, eval_result
             else:
                 print("⚠️  No evaluations could be performed")
@@ -100,7 +100,7 @@ class DailyPredictionAutomator:
     
     def run_complete_daily_automation(self):
         """Run both predictions and trading evaluation"""
-        print("🤖 COMPLETE DAILY AUTOMATION")
+        print(" COMPLETE DAILY AUTOMATION")
         print("=" * 50)
         
         results = {
@@ -166,7 +166,7 @@ class DailyPredictionAutomator:
         csv_file = self.predictions_dir / "csv" / f"predictions_{self.today}.csv"
         df.to_csv(csv_file, index=False)
         
-        print(f"📊 CSV saved: {csv_file} ({len(flattened_predictions)} model predictions)")
+        print(f" CSV saved: {csv_file} ({len(flattened_predictions)} model predictions)")
         
         # Also create a summary CSV with just ensemble predictions for quick reference
         ensemble_predictions = []
@@ -187,7 +187,7 @@ class DailyPredictionAutomator:
             ensemble_df = pd.DataFrame(ensemble_predictions)
             ensemble_file = self.predictions_dir / "csv" / f"ensemble_summary_{self.today}.csv"
             ensemble_df.to_csv(ensemble_file, index=False)
-            print(f"📊 Ensemble summary CSV: {ensemble_file}")
+            print(f" Ensemble summary CSV: {ensemble_file}")
     
     def create_daily_summary(self, predictions, evaluation_data=None):
         """Create human-readable daily summary"""
@@ -315,11 +315,11 @@ class DailyPredictionAutomator:
         with open(summary_file, 'w') as f:
             f.write(content)
         
-        print(f"📝 Summary saved: {summary_file}")
+        print(f" Summary saved: {summary_file}")
 
 def main():
     """Main function to run daily automation"""
-    print("🤖 DAILY PREDICTIONS & TRADING AUTOMATION")
+    print(" DAILY PREDICTIONS & TRADING AUTOMATION")
     print("=" * 60)
     
     automator = DailyPredictionAutomator()
@@ -331,14 +331,14 @@ def main():
     has_results = results['predictions'] or results['evaluation']
     
     if has_results:
-        print(f"\n🎉 Daily automation completed successfully!")
+        print(f"\n Daily automation completed successfully!")
         if results['predictions']:
-            print(f"📈 Generated predictions for {len(results['predictions'])} stocks")
+            print(f" Generated predictions for {len(results['predictions'])} stocks")
         if results['evaluation']:
-            print(f"📊 Evaluated {len(results['evaluation']['evaluated'])} previous predictions")
+            print(f" Evaluated {len(results['evaluation']['evaluated'])} previous predictions")
         print(f"� All results saved to files (Git operations handled by CI/CD)")
     else:
-        print(f"\n❌ No results generated - automation failed")
+        print(f"\n No results generated - automation failed")
 
 if __name__ == "__main__":
     main()

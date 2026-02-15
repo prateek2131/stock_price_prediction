@@ -115,12 +115,12 @@ class ModelComparison:
                     print(f"✓ Run {run+1} complete - Dir.Acc: {metrics['Directional_Accuracy']:.2f}%")
                     
                 except Exception as e:
-                    print(f"❌ Run {run+1} failed: {e}")
+                    print(f" Run {run+1} failed: {e}")
                     # Add placeholder for failed run
                     self.results[model_type].append(None)
                     self.predictions[model_type].append(None)
         
-        print(f"\n✅ All models trained!")
+        print(f"\n All models trained!")
     
     def calculate_statistics(self):
         """Calculate mean, std, and confidence intervals"""
@@ -151,7 +151,7 @@ class ModelComparison:
                         'runs': len(values)
                     }
         
-        print("✅ Statistics calculated!")
+        print(" Statistics calculated!")
     
     def significance_testing(self):
         """Perform statistical significance testing between models"""
@@ -196,7 +196,7 @@ class ModelComparison:
                         'significant': p_value < 0.05
                     }
         
-        print("✅ Significance testing complete!")
+        print(" Significance testing complete!")
     
     def print_comparison_table(self):
         """Print comprehensive comparison table"""
@@ -482,7 +482,7 @@ class ModelComparison:
                 pd.DataFrame(sig_data).to_csv(sig_path, index=False)
                 print(f"🔬 Significance tests saved: {sig_path}")
         
-        print(f"\n✅ All results saved with prefix: {filename}")
+        print(f"\n All results saved with prefix: {filename}")
     
     def run_full_comparison(self, save_plots=True):
         """Run complete comparison pipeline"""
@@ -524,7 +524,7 @@ def run_single_ticker(ticker='TCS.NS', epochs=50, runs=3):
 def run_sector_comparison(sector='Technology', epochs=50, runs=3):
     """Run comparison for all tickers in a sector"""
     if sector not in INDIAN_STOCKS_BY_SECTOR:
-        print(f"❌ Sector '{sector}' not found. Available sectors:")
+        print(f" Sector '{sector}' not found. Available sectors:")
         for s in INDIAN_STOCKS_BY_SECTOR.keys():
             print(f"   - {s}")
         return None
@@ -548,7 +548,7 @@ def run_sector_comparison(sector='Technology', epochs=50, runs=3):
             all_results[ticker] = result
             
         except Exception as e:
-            print(f"❌ Error processing {ticker}: {e}")
+            print(f" Error processing {ticker}: {e}")
             all_results[ticker] = None
     
     # Create sector summary
@@ -588,7 +588,7 @@ def create_sector_summary(sector, all_results):
         summary_df.to_csv(sector_path, index=False)
         print(f"\n💾 Sector summary saved: {sector_path}")
     
-    print(f"\n✅ Sector comparison complete!")
+    print(f"\n Sector comparison complete!")
 
 
 if __name__ == "__main__":

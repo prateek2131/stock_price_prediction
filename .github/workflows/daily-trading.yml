@@ -70,7 +70,7 @@ jobs:
         echo "💰 P/L Tracking: Individual model performance evaluation"
         
         if python daily_predictions.py; then
-          echo "✅ Daily automation completed successfully at $(date)"
+          echo " Daily automation completed successfully at $(date)"
           
           echo ""
           echo "📁 Generated Files:"
@@ -79,20 +79,20 @@ jobs:
           echo ""
           echo "📊 Summary of results:"
           if [ -f "daily_predictions/summary/summary_$(date +%Y-%m-%d).md" ]; then
-            echo "✅ Daily summary report with model P/L analysis generated"
+            echo " Daily summary report with model P/L analysis generated"
           fi
           if [ -f "daily_predictions/csv/predictions_$(date +%Y-%m-%d).csv" ]; then
-            echo "✅ Multi-model prediction CSV generated"
+            echo " Multi-model prediction CSV generated"
             TOTAL_PREDICTIONS=$(wc -l < daily_predictions/csv/predictions_$(date +%Y-%m-%d).csv)
             STOCKS_COUNT=$((TOTAL_PREDICTIONS / 4))
-            echo "📈 Predictions: $STOCKS_COUNT stocks × 4 models = $TOTAL_PREDICTIONS total predictions"
+            echo " Predictions: $STOCKS_COUNT stocks × 4 models = $TOTAL_PREDICTIONS total predictions"
           fi
           if [ -f "daily_predictions/csv/ensemble_summary_$(date +%Y-%m-%d).csv" ]; then
-            echo "✅ Ensemble summary CSV generated for quick reference"
+            echo " Ensemble summary CSV generated for quick reference"
           fi
           
         else
-          echo "❌ Daily automation failed at $(date)"
+          echo " Daily automation failed at $(date)"
           echo "📋 Checking for any partial results..."
           find . -name "*.log" -o -name "*.csv" -o -name "*.json" | head -10
           exit 1
@@ -140,7 +140,7 @@ jobs:
           echo "📊 Committing prediction results..."
           git commit -m "Daily predictions $COMMIT_DATE"
           git push origin main
-          echo "✅ Results saved to GitHub"
+          echo " Results saved to GitHub"
         else
           echo "ℹ️ No new results to commit"
         fi

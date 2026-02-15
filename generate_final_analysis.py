@@ -125,7 +125,7 @@ def data_leakage_assessment(df):
     # Data leakage verdict
     suspicious_count = sum(r2 > 0.95 for r2 in r2_values)
     if suspicious_count <= 1:
-        print(f"\n✅ DATA LEAKAGE ASSESSMENT: CLEAN")
+        print(f"\n DATA LEAKAGE ASSESSMENT: CLEAN")
         print(f"   Only {suspicious_count} case(s) with R² > 0.95")
     else:
         print(f"\n⚠️  POTENTIAL DATA LEAKAGE DETECTED")
@@ -295,7 +295,7 @@ def create_performance_visualizations(df):
     plt.savefig('results/comprehensive_performance_analysis.png', dpi=300, bbox_inches='tight')
     plt.close()
     
-    print("✅ Performance visualizations saved to: results/comprehensive_performance_analysis.png")
+    print(" Performance visualizations saved to: results/comprehensive_performance_analysis.png")
 
 def generate_model_comparison_table(df):
     """Generate LaTeX table for publication"""
@@ -345,7 +345,7 @@ def main():
     try:
         # Load results
         df = load_results()
-        print(f"✅ Loaded results: {len(df)} records across {df['Ticker'].nunique()} stocks")
+        print(f" Loaded results: {len(df)} records across {df['Ticker'].nunique()} stocks")
         
         # Generate all analyses
         generate_performance_summary(df)
@@ -360,11 +360,11 @@ def main():
         print("=" * 80)
         print("📊 Performance visualizations: results/comprehensive_performance_analysis.png")
         print("📋 LaTeX table: Ready for copy-paste into paper")
-        print("✅ All metrics validated - No data leakage detected")
+        print(" All metrics validated - No data leakage detected")
         print("🎯 Ensemble model ready for publication")
         
     except Exception as e:
-        print(f"❌ Error during analysis: {e}")
+        print(f" Error during analysis: {e}")
         raise
 
 if __name__ == "__main__":

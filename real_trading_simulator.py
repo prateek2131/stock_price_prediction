@@ -69,7 +69,7 @@ class RealTradingSimulator:
             data = stock.history(period=f"{days}d")
             return data
         except Exception as e:
-            print(f"❌ Error getting data for {ticker}: {e}")
+            print(f" Error getting data for {ticker}: {e}")
             return pd.DataFrame()
     
     def make_prediction_with_real_model(self, ticker: str, model_type: str = 'all') -> dict:
@@ -149,11 +149,11 @@ class RealTradingSimulator:
                         'prediction_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     }
             else:
-                print(f"❌ Prediction failed for {ticker}: No predictions available")
+                print(f" Prediction failed for {ticker}: No predictions available")
                 return {'success': False, 'ticker': ticker, 'error': 'No predictions available'}
                 
         except Exception as e:
-            print(f"❌ Error making prediction for {ticker}: {e}")
+            print(f" Error making prediction for {ticker}: {e}")
             return {'success': False, 'ticker': ticker, 'error': str(e)}
     
     def should_invest(self, prediction: dict) -> bool:
@@ -211,7 +211,7 @@ class RealTradingSimulator:
                 
                 if not prediction['success']:
                     daily_results['failed_predictions'] += 1
-                    print(f"  ❌ Prediction failed: {prediction.get('error', 'Unknown')}")
+                    print(f"   Prediction failed: {prediction.get('error', 'Unknown')}")
                     continue
                 
                 daily_results['successful_predictions'] += 1
@@ -244,9 +244,9 @@ class RealTradingSimulator:
                     daily_results['total_invested'] += self.investment_per_stock
                     daily_results['buy_trades'] += 1
                     
-                    print(f"  ✅ BUY: {shares:.2f} shares at ₹{current_price:.2f}")
+                    print(f"   BUY: {shares:.2f} shares at ₹{current_price:.2f}")
                     print(f"  💰 Investment: ₹{self.investment_per_stock:,.0f}")
-                    print(f"  📈 Predicted: ₹{predicted_price:.2f} (UP)")
+                    print(f"   Predicted: ₹{predicted_price:.2f} (UP)")
                     
                 else:
                     # Record hold decision
@@ -271,7 +271,7 @@ class RealTradingSimulator:
                     print(f"  💸 No investment")
                 
             except Exception as e:
-                print(f"  ❌ Error processing {ticker}: {e}")
+                print(f"   Error processing {ticker}: {e}")
                 daily_results['failed_predictions'] += 1
         
         # Print daily summary
@@ -312,7 +312,7 @@ class RealTradingSimulator:
                 # Get current price
                 stock_data = self.get_historical_data(ticker, days=5)
                 if stock_data.empty:
-                    print(f"❌ No current price data for {ticker}")
+                    print(f" No current price data for {ticker}")
                     continue
                 
                 current_price = float(stock_data['Close'].iloc[-1])
@@ -344,7 +344,7 @@ class RealTradingSimulator:
                 print(f"  {ticker}: ₹{profit_loss:+,.2f} ({return_pct:+.2f}%) - {evaluated_trade['accuracy']}")
                 
             except Exception as e:
-                print(f"❌ Error evaluating {ticker}: {e}")
+                print(f" Error evaluating {ticker}: {e}")
         
         print(f"\n💰 Total Profit/Loss: ₹{total_profit_loss:+,.2f}")
         return evaluated_trades
@@ -414,7 +414,7 @@ class RealTradingSimulator:
                 
                 performance_summary.to_excel(writer, sheet_name='Performance_Summary', index=False)
         
-        print(f"✅ Results saved to: {self.excel_file}")
+        print(f" Results saved to: {self.excel_file}")
     
     def run_simulation(self, days: int = 5):
         """
@@ -476,7 +476,7 @@ class RealTradingSimulator:
             print(f"📅 Simulation Period: {days} days")
             print(f"💰 Total Invested: ₹{total_invested:,.0f}")
             print(f"💹 Total Profit/Loss: ₹{total_profit_loss:+,.0f}")
-            print(f"📈 Total Return: {total_return:+.2f}%")
+            print(f" Total Return: {total_return:+.2f}%")
             print(f"🎯 Prediction Accuracy: {accuracy:.1f}%")
             print(f"📊 Results saved to: {self.excel_file}")
     
@@ -501,14 +501,14 @@ class RealTradingSimulator:
         filepath = predictions_dir / filename
         
         if not filepath.exists():
-            print(f"❌ No predictions found for {date}")
+            print(f" No predictions found for {date}")
             return []
         
         import json
         with open(filepath, 'r') as f:
             predictions = json.load(f)
         
-        print(f"📂 Loaded {len(predictions)} predictions from {date}")
+        print(f" Loaded {len(predictions)} predictions from {date}")
         return predictions
     
     def load_previous_predictions_from_daily(self, date: str) -> List[dict]:
@@ -533,11 +533,11 @@ class RealTradingSimulator:
             else:
                 predictions = []
             
-            print(f"📂 Loaded {len(predictions)} predictions from daily_predictions/{date}")
+            print(f" Loaded {len(predictions)} predictions from daily_predictions/{date}")
             return predictions
             
         except Exception as e:
-            print(f"❌ Error loading predictions from daily_predictions: {e}")
+            print(f" Error loading predictions from daily_predictions: {e}")
             return []
     
     def make_predictions_only(self) -> dict:
@@ -559,7 +559,7 @@ class RealTradingSimulator:
                 prediction = self.make_prediction_with_real_model(ticker, 'all')
                 
                 if not prediction['success']:
-                    print(f"  ❌ Prediction failed: {prediction.get('error', 'Unknown')}")
+                    print(f"   Prediction failed: {prediction.get('error', 'Unknown')}")
                     continue
                 
                 # Store predictions for all models
@@ -578,16 +578,16 @@ class RealTradingSimulator:
                     print(f"    {model_name}: ₹{model_pred['predicted_price']:.2f} "
                           f"({model_pred['predicted_change_pct']:+.2f}%)")
                 
-                print(f"  ✅ All model predictions completed for {ticker}")
+                print(f"   All model predictions completed for {ticker}")
                 
             except Exception as e:
-                print(f"  ❌ Error: {e}")
+                print(f"   Error: {e}")
         
         # Save predictions
         if predictions:
             self.save_daily_predictions(predictions, today)
             
-            print(f"\n✅ Made {len(predictions)} predictions for {tomorrow}")
+            print(f"\n Made {len(predictions)} predictions for {tomorrow}")
             print(f"💡 Run with --evaluate-only tomorrow to validate these predictions!")
         
         return {'predictions': predictions, 'date': today}
@@ -630,13 +630,13 @@ class RealTradingSimulator:
         
         for pred in predictions:
             ticker = pred['ticker']
-            print(f"\n📈 Evaluating {ticker}...")
+            print(f"\n Evaluating {ticker}...")
             
             try:
                 # Get today's actual price
                 stock_data = self.get_historical_data(ticker, days=5)
                 if stock_data.empty:
-                    print(f"  ❌ No data available")
+                    print(f"   No data available")
                     continue
                 
                 # Get today's closing price
@@ -701,7 +701,7 @@ class RealTradingSimulator:
                         evaluated.append(evaluation)
                         model_performance[model_name].append(evaluation)
                         
-                        print(f"    {model_name}: {trade_action} → {'✅' if direction_correct else '❌'} "
+                        print(f"    {model_name}: {trade_action} → {'' if direction_correct else ''} "
                               f"P/L: ₹{profit_loss:+.2f}")
                     
                 else:
@@ -759,11 +759,11 @@ class RealTradingSimulator:
                     evaluated.append(evaluation)
                     model_performance['ensemble'].append(evaluation)
                     
-                    print(f"    ensemble: {trade_action} → {'✅' if direction_correct else '❌'} "
+                    print(f"    ensemble: {trade_action} → {'' if direction_correct else ''} "
                           f"P/L: ₹{profit_loss:+.2f}")
                 
             except Exception as e:
-                print(f"  ❌ Error evaluating {ticker}: {e}")
+                print(f"   Error evaluating {ticker}: {e}")
                 continue
                 price_error = abs(actual_price - predicted_price)
                 price_error_pct = (price_error / actual_price) * 100
@@ -787,14 +787,14 @@ class RealTradingSimulator:
                 
                 evaluated.append(eval_data)
                 
-                direction_emoji = "✅" if direction_correct else "❌"
+                direction_emoji = "" if direction_correct else ""
                 print(f"  {direction_emoji} Predicted: ₹{predicted_price:.2f} | "
                       f"Actual: ₹{actual_price:.2f} | "
                       f"Error: {price_error_pct:.2f}% | "
                       f"Direction: {direction_correct}")
                 
             except Exception as e:
-                print(f"  ❌ Error evaluating {ticker}: {e}")
+                print(f"   Error evaluating {ticker}: {e}")
         
         # Calculate summary statistics
         if evaluated:
@@ -837,7 +837,7 @@ class RealTradingSimulator:
             print("=" * 50)
             print(f"📅 Date: {last_trading_day}")
             print(f"🎯 Total Predictions Evaluated: {summary['total_predictions']}")
-            print(f"📈 Average Price Error: {avg_error:.2f}%")
+            print(f" Average Price Error: {avg_error:.2f}%")
             print(f"🎯 Direction Accuracy: {direction_accuracy:.1f}%")
             print(f"💰 Total P/L: ₹{total_profit_loss:+,.2f}")
             print(f"💼 Total Investment: ₹{total_investment:,.2f}")
@@ -907,7 +907,7 @@ Examples:
     
     # Validate arguments
     if not any([args.ticker, args.tickers, args.portfolio, args.sector]) and not args.evaluate_only:
-        print("❌ Error: Must specify --ticker, --tickers, --portfolio, or --sector")
+        print(" Error: Must specify --ticker, --tickers, --portfolio, or --sector")
         parser.print_help()
         return
     
@@ -916,9 +916,9 @@ Examples:
         simulator = RealTradingSimulator(investment_per_stock=args.investment)
         try:
             result = simulator.evaluate_previous_predictions()
-            print(f"\n✅ Evaluation completed successfully!")
+            print(f"\n Evaluation completed successfully!")
         except Exception as e:
-            print(f"\n❌ Evaluation failed: {e}")
+            print(f"\n Evaluation failed: {e}")
             if args.verbose:
                 import traceback
                 traceback.print_exc()
@@ -937,7 +937,7 @@ Examples:
         if args.sector in INDIAN_STOCKS_BY_SECTOR:
             stocks = INDIAN_STOCKS_BY_SECTOR[args.sector]
         else:
-            print(f"❌ Error: Sector '{args.sector}' not found")
+            print(f" Error: Sector '{args.sector}' not found")
             print(f"Available sectors: {', '.join(INDIAN_STOCKS_BY_SECTOR.keys())}")
             return
             
@@ -951,9 +951,9 @@ Examples:
     if args.predict_only:
         try:
             result = simulator.make_predictions_only()
-            print(f"\n✅ Predictions completed successfully!")
+            print(f"\n Predictions completed successfully!")
         except Exception as e:
-            print(f"\n❌ Prediction failed: {e}")
+            print(f"\n Prediction failed: {e}")
             if args.verbose:
                 import traceback
                 traceback.print_exc()
@@ -964,7 +964,7 @@ Examples:
         if len(stocks) == 1:
             print(f"🎯 Single Stock Simulation: {stocks[0]}")
         else:
-            print(f"📈 Multi-Stock Simulation: {', '.join(stocks)}")
+            print(f" Multi-Stock Simulation: {', '.join(stocks)}")
     else:
         print(f"💼 Full Portfolio Simulation: All stocks")
     
@@ -977,13 +977,13 @@ Examples:
         else:
             simulator.run_simulation(days=args.days)
         
-        print(f"\n✅ Simulation completed successfully!")
+        print(f"\n Simulation completed successfully!")
         
     except KeyboardInterrupt:
         print(f"\n⚠️  Simulation interrupted by user")
         
     except Exception as e:
-        print(f"\n❌ Simulation failed: {e}")
+        print(f"\n Simulation failed: {e}")
         if args.verbose:
             import traceback
             traceback.print_exc()

@@ -131,7 +131,7 @@ def analyze_sector_performance(df):
         'Directional_Accuracy': 'mean'
     }).round(4)
     
-    print("\n📈 R² SCORES BY SECTOR AND MODEL:")
+    print("\n R² SCORES BY SECTOR AND MODEL:")
     r2_pivot = sector_performance['R2'].unstack()
     print(r2_pivot.to_string())
     
@@ -153,7 +153,7 @@ def analyze_daily_predictions(daily_df, ensemble_df):
     print("-" * 35)
     
     if daily_df.empty:
-        print("❌ No daily prediction data available")
+        print(" No daily prediction data available")
         return None, None
     
     print(f"📊 Daily Prediction Data Summary:")
@@ -168,7 +168,7 @@ def analyze_daily_predictions(daily_df, ensemble_df):
         'confidence': 'mean'
     }).round(4)
     
-    print(f"\n📈 DAILY PREDICTION TRENDS BY MODEL:")
+    print(f"\n DAILY PREDICTION TRENDS BY MODEL:")
     for model in daily_df['model'].unique():
         model_data = daily_df[daily_df['model'] == model]
         
@@ -257,7 +257,7 @@ def trading_performance_simulation(ensemble_df):
     print("-" * 40)
     
     if ensemble_df.empty:
-        print("❌ No ensemble data for trading simulation")
+        print(" No ensemble data for trading simulation")
         return
     
     # Trading parameters
@@ -278,7 +278,7 @@ def trading_performance_simulation(ensemble_df):
         high_conf_data = date_data[date_data['confidence'] > 0.3]  # Minimum 30% confidence
         
         if len(high_conf_data) == 0:
-            print("   ❌ No high-confidence predictions")
+            print("    No high-confidence predictions")
             continue
         
         # Simulate trades
@@ -435,7 +435,7 @@ def create_comprehensive_visualizations(df, daily_df, ensemble_df):
     # Save the comprehensive visualization
     output_path = project_dir / "results" / "comprehensive_analysis_report.png"
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
-    print(f"   ✅ Comprehensive visualization saved: {output_path}")
+    print(f"    Comprehensive visualization saved: {output_path}")
     plt.close()
 
 def generate_executive_summary(df, daily_df, ensemble_df):
@@ -494,12 +494,12 @@ def main():
     print("=" * 70)
     
     # Load all data
-    print("📂 Loading data...")
+    print(" Loading data...")
     overall_df = load_overall_results()
     daily_df, ensemble_df = load_daily_predictions()
     
     if overall_df is None:
-        print("❌ Cannot proceed without overall results data")
+        print(" Cannot proceed without overall results data")
         return
     
     # Run comprehensive analysis
@@ -526,7 +526,7 @@ def main():
     # 7. Executive Summary
     generate_executive_summary(overall_df, daily_df, ensemble_df)
     
-    print(f"\n✅ COMPREHENSIVE ANALYSIS COMPLETE!")
+    print(f"\n COMPREHENSIVE ANALYSIS COMPLETE!")
     print(f"📊 Visualizations saved to: results/comprehensive_analysis_report.png")
     print("=" * 70)
 
