@@ -75,6 +75,47 @@ class ModelPredictor:
         print(f"Ticker: {ticker} | Prediction Days: {prediction_days}")
         print('='*80)
     
+    @staticmethod
+    def _to_scalar(value):
+        """Convert any numeric type to Python scalar
+        
+        Handles: int, float, numpy types, pandas Series, pandas Index values
+        Returns: Python float
+        """
+        # Already a Python scalar
+        if isinstance(value, (int, float)) and not isinstance(value, (np.integer, np.floating)):
+            return float(value)
+        
+        # Pandas Series - extract first value
+        if isinstance(value, pd.Series):
+            if len(value) == 0:
+                raise ValueError("Cannot convert empty Series to scalar")
+            return float(value.iloc[0])
+        
+        # Has .item() method (numpy scalars, some pandas types)
+        if hasattr(value, 'item'):
+            return float(value.item())
+        
+        # Has .iloc (DataFrame, Index, etc.)
+        if hasattr(value, 'iloc'):
+            if len(value) > 0:
+                return float(value.iloc[0])
+            else:
+                # Try direct float conversion
+                return float(value)
+        
+        # Has .values (Series, Index, etc.)
+        if hasattr(value, 'values'):
+            vals = value.values
+            if len(vals) > 0:
+                return float(vals[0])
+        
+        # Last resort: direct float conversion
+        try:
+            return float(value)
+        except (TypeError, ValueError) as e:
+            raise ValueError(f"Cannot convert {type(value)} to scalar: {value}") from e
+    
     def load_trained_models(self, model_dir=None):
         """Load pre-trained models"""
         model_dir = model_dir or PATHS['models']
@@ -116,14 +157,16 @@ class ModelPredictor:
     def download_latest_data(self, days=365):
         """Download latest data for predictions
         
-        NOTE: Call AFTER market close (3:30 PM IST)
-        At 4:00 PM IST: Today's closing price MUST be available
-        Forces yfinance to include today's close by using end_date=tomorrow
+        FIXED: Properly handles today's closing price when available
+        - If run after 4 PM on trading day: includes today's closing price
+        - If run before market close: uses yesterday's closing price
+        - If run on weekend/holiday: uses last Friday's closing price as reference
         """
-        print(f"\n Downloading latest {days} days of data...")
+        print(f"\n📥 Downloading latest {days} days of data...")
         
-        end_date = datetime.now() + timedelta(days=1)  # Include today + tomorrow for safety
-        start_date = end_date - timedelta(days=days)
+        # FIXED: Request data up to tomorrow to ensure we get today's data if available
+        end_date = datetime.now() + timedelta(days=1)
+        start_date = datetime.now() - timedelta(days=days)
         
         self.data = yf.download(
             self.ticker,
@@ -132,13 +175,28 @@ class ModelPredictor:
             progress=False
         ).dropna()
         
-        if len(self.data) == 0:
-            print(f" WARNING: No data downloaded for {self.ticker}")
-            return self.data
+        print(f"Downloaded {len(self.data)} trading days")
         
-        print(f" Downloaded {len(self.data)} trading days")
-        print(f" Latest data date: {self.data.index[-1].strftime('%Y-%m-%d')}")
-        print(f" Using TODAY'S CLOSING price: ₹{self.data['Close'].iloc[-1]:.2f}")
+        # FIXED: Determine if today's data is included and clearly communicate it
+        today = datetime.now().date()
+        last_data_date = self.data.index[-1].date()
+        
+        print(f"Current date: {today.strftime('%Y-%m-%d')}")
+        print(f"Most recent trading day in data: {last_data_date.strftime('%Y-%m-%d')}")
+        
+        if last_data_date == today:
+            print(f"TODAY'S closing price available and will be used as reference")
+            ref_price = self._to_scalar(self.data['Close'].iloc[-1])
+            print(f"Reference price: ₹{ref_price:.2f} (Today's close)")
+        elif last_data_date == (today - timedelta(days=1)):
+            print(f"ℹToday's data not yet available (market hasn't closed)")
+            ref_price = self._to_scalar(self.data['Close'].iloc[-1])
+            print(f"Reference price: ₹{ref_price:.2f} (Yesterday's close)")
+        else:
+            days_ago = (today - last_data_date).days
+            print(f"Using {days_ago} day(s) old data (weekend/holiday)")
+            ref_price = self._to_scalar(self.data['Close'].iloc[-1])
+            print(f"Reference price: ₹{ref_price:.2f} ({last_data_date.strftime('%Y-%m-%d')} close)")
         
         return self.data
     
@@ -201,60 +259,55 @@ class ModelPredictor:
                     confidence = max(0.0, min(1.0, float(confidence)))  # Ensure valid range
                 
                 # Ensure scalar values
-                # Get today's closing price (available after 3:30 PM IST, we run at 4:00 PM)
+                # FIXED: Ensure ALL values are scalars before storing
+                # Get the last available closing price (most recent trading day)
                 current_price = self.data['Close'].iloc[-1]
-                reference_date = self.data.index[-1].strftime('%Y-%m-%d')
-                price_source = "TODAY'S CLOSING PRICE"
+                current_date = self.data.index[-1]  # Last trading day date
                 
-                if hasattr(current_price, 'item'):
-                    current_price = current_price.item()
-                elif hasattr(current_price, 'iloc'):
-                    current_price = current_price.iloc[0] if len(current_price) > 0 else float(current_price)
+                # Helper function to ensure scalar conversion
+                def to_scalar(value):
+                    """Convert any numeric type to Python scalar"""
+                    if isinstance(value, (int, float)):
+                        return float(value)
+                    elif hasattr(value, 'item'):
+                        return float(value.item())
+                    elif hasattr(value, 'iloc'):
+                        if len(value) > 0:
+                            return float(value.iloc[0])
+                        else:
+                            return float(value)
+                    elif isinstance(value, pd.Series):
+                        return float(value.iloc[0] if len(value) > 0 else value.values[0])
+                    else:
+                        return float(value)
                 
-                price_change = next_day_price - current_price
-                if hasattr(price_change, 'item'):
-                    price_change = price_change.item()
-                elif hasattr(price_change, 'iloc'):
-                    price_change = price_change.iloc[0] if len(price_change) > 0 else float(price_change)
+                # Convert all values to scalars
+                # Convert all values to scalars using helper
+                current_price = self._to_scalar(current_price)
+                next_day_price = self._to_scalar(next_day_price)
+                confidence = self._to_scalar(confidence)
                 
-                price_change_pct = ((next_day_price / current_price) - 1) * 100
-                if hasattr(price_change_pct, 'item'):
-                    price_change_pct = price_change_pct.item()
-                elif hasattr(price_change_pct, 'iloc'):
-                    price_change_pct = price_change_pct.iloc[0] if len(price_change_pct) > 0 else float(price_change_pct)
+                # Calculate derived values (now guaranteed to be scalars)
+                price_change = float(next_day_price) - float(current_price)
+                price_change_pct = ((float(next_day_price) / float(current_price)) - 1) * 100
                 
                 self.predictions[model_type] = {
-                    'next_day_price': float(next_day_price),
-                    'current_price': float(current_price),
-                    'reference_date': reference_date,  # Date/time of price used
-                    'price_source': price_source,  # Source of current price
-                    'price_change': float(price_change),
-                    'price_change_pct': float(price_change_pct),
-                    'confidence': float(confidence),
+                    'next_day_price': float(next_day_price),  # Ensure float
+                    'current_price': float(current_price),     # Ensure float
+                    'current_date': current_date,
+                    'price_change': float(price_change),       # Ensure float
+                    'price_change_pct': float(price_change_pct),  # Ensure float
+                    'confidence': float(confidence),           # Ensure float
                     'prediction_date': self._get_next_trading_day()
                 }
                 
-                # Convert to scalar for printing
-                price_change_pct = self.predictions[model_type]['price_change_pct']
-                if hasattr(price_change_pct, 'iloc'):
-                    price_change_pct = price_change_pct.iloc[0] if len(price_change_pct) > 0 else price_change_pct
-                elif hasattr(price_change_pct, 'item'):
-                    price_change_pct = price_change_pct.item()
-                else:
-                    price_change_pct = float(price_change_pct)
-                
-                next_day_price_scalar = next_day_price
-                if hasattr(next_day_price, 'iloc'):
-                    next_day_price_scalar = next_day_price.iloc[0] if len(next_day_price) > 0 else next_day_price
-                elif hasattr(next_day_price, 'item'):
-                    next_day_price_scalar = next_day_price.item()
-                else:
-                    next_day_price_scalar = float(next_day_price)
-                
-                print(f" {model_type}: ₹{float(next_day_price_scalar):.2f} ({float(price_change_pct):+.2f}%)")
+                # Values are now guaranteed to be floats, safe to print
+                print(f"  ✅ {model_type}: ₹{float(next_day_price):.2f} ({float(price_change_pct):+.2f}%)")
                 
             except Exception as e:
                 print(f" Error generating {model_type} predictions: {e}")
+                import traceback
+                traceback.print_exc()
         
         # Create ensemble of all predictions
         # self._create_next_day_meta_ensemble()  # Removed: Not needed
@@ -349,10 +402,13 @@ class ModelPredictor:
         valid_predictions = {}
         for model_type, pred in self.predictions.items():
             next_day_price = pred['next_day_price']
+            # Ensure it's a scalar
             if hasattr(next_day_price, 'item'):
-                next_day_price = next_day_price.item()
+                next_day_price = float(next_day_price.item())
             elif hasattr(next_day_price, 'iloc'):
-                next_day_price = next_day_price.iloc[0] if len(next_day_price) > 0 else float(next_day_price)
+                next_day_price = float(next_day_price.iloc[0]) if len(next_day_price) > 0 else float(next_day_price)
+            else:
+                next_day_price = float(next_day_price)
             
             # Check if prediction is valid (not NaN or inf)
             if not (np.isnan(next_day_price) or np.isinf(next_day_price)):
@@ -439,27 +495,36 @@ class ModelPredictor:
         
         print(f" Meta-ensemble: ₹{ensemble_price:.2f} ({price_change_pct:+.2f}%)")
     
+    
     def _print_prediction_summary(self):
         """Print comprehensive prediction summary"""
         print(f"\n{'='*80}")
         print(f"NEXT-DAY PREDICTION SUMMARY - {self.ticker}")
         print('='*80)
         
-        current_price = self.data['Close'].iloc[-1]
-        # Ensure current_price is scalar
-        if hasattr(current_price, 'item'):
-            current_price = current_price.item()
-        elif hasattr(current_price, 'iloc'):
-            current_price = current_price.iloc[0] if len(current_price) > 0 else float(current_price)
-        else:
-            current_price = float(current_price)
+        try:
+            current_price = self._to_scalar(self.data['Close'].iloc[-1])
+        except Exception as e:
+            print(f"Error getting current price: {e}")
+            return
             
         next_trading_day = self._get_next_trading_day()
         
-        print(f"📅 Current Date: {self.data.index[-1].strftime('%Y-%m-%d')}")
+        # FIXED: Clear labeling of dates
+        reference_date = self.data.index[-1]
+        today = datetime.now().date()
+        if reference_date.date() == today:
+            reference_label = "TODAY'S CLOSE"
+        elif reference_date.date() == (today - timedelta(days=1)):
+            reference_label = "YESTERDAY'S CLOSE"
+        else:
+            days_ago = (today - reference_date.date()).days
+            reference_label = f"{days_ago} DAY(S) AGO"
+        
+        print(f"📅 Current Date: {datetime.now().strftime('%Y-%m-%d %I:%M %p')}")
+        print(f"📅 Reference Date: {reference_date.strftime('%Y-%m-%d')} ({reference_label})")
         print(f"📅 Next Trading Day: {next_trading_day.strftime('%Y-%m-%d')}")
-        print(f"💰 Current Price: ₹{current_price:.2f}")
-        print(f"\n{'─'*80}")
+        print(f"💰 Reference Price: ₹{current_price:.2f}")
         
         # Sort predictions by confidence  
         sorted_predictions = sorted(
@@ -472,15 +537,22 @@ class ModelPredictor:
         print('─'*65)
         
         for model_type, pred in sorted_predictions:
-            # Ensure all values are scalars before formatting
-            next_day_price = float(pred['next_day_price'])
-            price_change = float(pred['price_change'])
-            price_change_pct = float(pred['price_change_pct'])
-            
-            print(f"{model_type.title():<15} "
-                  f"₹{next_day_price:<9.2f} "
-                  f"₹{price_change:<11.2f} "
-                  f"{price_change_pct:<9.2f}%")
+            try:
+                # Values should already be scalars, but ensure just in case
+                next_day_price = float(self._to_scalar(pred['next_day_price']))
+                price_change = float(self._to_scalar(pred['price_change']))
+                price_change_pct = float(self._to_scalar(pred['price_change_pct']))
+                confidence = float(self._to_scalar(pred['confidence'])) * 100
+                
+                direction_emoji = "📈" if price_change > 0 else "📉"
+                
+                print(f"{model_type.title():<15} "
+                      f"₹{next_day_price:<17.2f} "
+                      f"{direction_emoji} ₹{price_change:<10.2f} "
+                      f"{price_change_pct:>8.2f}% "
+                      f"{confidence:>9.1f}%")
+            except Exception as e:
+                print(f"{model_type.title():<15} Error formatting prediction: {e}")
         
         # Meta ensemble section removed - not needed
         
@@ -882,25 +954,33 @@ class ModelPredictor:
         
         # Create export data
         export_data = []
-        current_price = self.data['Close'].iloc[-1]
+        current_price = self._to_scalar(self.data['Close'].iloc[-1])
         next_trading_day = self._get_next_trading_day()
         
         for model_type, pred in self.predictions.items():
-            confidence_pct = pred['confidence'] * 100 if pred['confidence'] <= 1 else pred['confidence']
-            
-            export_data.append({
-                'Ticker': self.ticker,
-                'Current_Date': self.data.index[-1].strftime('%Y-%m-%d'),
-                'Prediction_Date': next_trading_day.strftime('%Y-%m-%d'),
-                'Model': model_type.title(),
-                'Current_Price': current_price,
-                'Predicted_Price': pred['next_day_price'],
-                'Price_Change': pred['price_change'],
-                'Price_Change_Pct': pred['price_change_pct'],
-                'Confidence_Pct': confidence_pct,
-                'Direction': 'UP' if pred['price_change'] > 0 else 'DOWN'
-            })
-        
+            try:
+                # Ensure all values are scalars before creating the export entry
+                confidence_pct = float(self._to_scalar(pred['confidence'])) * 100 if float(self._to_scalar(pred['confidence'])) <= 1 else float(self._to_scalar(pred['confidence']))
+                predicted_price = float(self._to_scalar(pred['next_day_price']))
+                price_change = float(self._to_scalar(pred['price_change']))
+                price_change_pct = float(self._to_scalar(pred['price_change_pct']))
+                reference_date = self.data.index[-1]
+                
+                export_data.append({
+                    'Ticker': self.ticker,
+                    'Reference_Date': reference_date.strftime('%Y-%m-%d'),  # CHANGED: More accurate naming
+                    'Prediction_Date': next_trading_day.strftime('%Y-%m-%d'),
+                    'Model': model_type.title(),
+                    'Reference_Price': current_price,
+                    'Predicted_Price': predicted_price,
+                    'Price_Change': price_change,
+                    'Price_Change_Pct': price_change_pct,
+                    'Confidence_Pct': confidence_pct,
+                    'Direction': 'UP' if price_change > 0 else 'DOWN'
+                })
+            except Exception as e:
+                print(f"Warning: Could not export prediction for {model_type}: {e}")
+                continue
         # Save to CSV
         export_df = pd.DataFrame(export_data)
         export_path = os.path.join(PATHS['results'], filename)
@@ -990,21 +1070,34 @@ def create_portfolio_summary(predictors):
     
     for ticker, predictor in predictors.items():
         if predictor and predictor.predictions:
-            # Get the model with highest confidence instead of meta_ensemble
-            best_model = max(predictor.predictions.items(), key=lambda x: x[1]['confidence'])
-            model_name, best_pred = best_model
-            current_price = predictor.data['Close'].iloc[-1]
-            
-            summary_data.append({
-                'Ticker': ticker,
-                'Model': model_name.upper(),
-                'Current_Price': current_price,
-                'Next_Day_Prediction': best_pred['next_day_price'],
-                'Price_Change': best_pred['price_change'],
-                'Change_Pct': best_pred['price_change_pct'],
-                'Direction': 'UP' if best_pred['price_change'] > 0 else 'DOWN',
-                'Confidence': best_pred['confidence'] * 100 if best_pred['confidence'] <= 1 else best_pred['confidence']
-            })
+            try:
+                # Get the model with highest confidence instead of meta_ensemble
+                best_model = max(predictor.predictions.items(), key=lambda x: x[1]['confidence'])
+                model_name, best_pred = best_model
+                current_price = ModelPredictor._to_scalar(predictor.data['Close'].iloc[-1])
+                
+                reference_date = predictor.data.index[-1]  # ADDED
+                
+                # Ensure all values are scalars
+                next_day_pred = float(ModelPredictor._to_scalar(best_pred['next_day_price']))
+                price_change = float(ModelPredictor._to_scalar(best_pred['price_change']))
+                change_pct = float(ModelPredictor._to_scalar(best_pred['price_change_pct']))
+                confidence = float(ModelPredictor._to_scalar(best_pred['confidence']))
+                
+                summary_data.append({
+                    'Ticker': ticker,
+                    'Reference_Date': reference_date.strftime('%Y-%m-%d'),  # ADDED
+                    'Model': model_name.upper(),
+                    'Current_Price': current_price,
+                    'Next_Day_Prediction': next_day_pred,
+                    'Price_Change': price_change,
+                    'Change_Pct': change_pct,
+                    'Direction': 'UP' if price_change > 0 else 'DOWN',
+                    'Confidence': confidence * 100 if confidence <= 1 else confidence
+                })
+            except Exception as e:
+                print(f"Warning: Could not summarize predictions for {ticker}: {e}")
+                continue
     
     if summary_data:
         portfolio_df = pd.DataFrame(summary_data)
@@ -1014,18 +1107,29 @@ def create_portfolio_summary(predictors):
         portfolio_df = portfolio_df.sort_values('Abs_Change_Pct', ascending=False)
         
         # Display formatted table
-        print(f"{'Ticker':<10} {'Model':<10} {'Current':<10} {'Predicted':<10} {'Change':<10} {'Change%':<8} {'Direction':<9} {'Confidence':<10}")
+        print(f"{'Ticker':<10} {'Ref Date':<12} {'Model':<10} {'Current':<10} {'Predicted':<10} {'Change':<10} {'Change%':<8} {'Direction':<9} {'Confidence':<10}")
         print('─' * 95)
         
         for _, row in portfolio_df.iterrows():
-            print(f"{row['Ticker']:<10} "
-                  f"{row['Model']:<10} "
-                  f"₹{row['Current_Price']:<9.2f} "
-                  f"₹{row['Next_Day_Prediction']:<9.2f} "
-                  f"₹{row['Price_Change']:<9.2f} "
-                  f"{row['Change_Pct']:<7.2f}% "
-                  f"{row['Direction']:<9} "
-                  f"{row['Confidence']:<9.1f}%")
+            try:
+                # Ensure all values are floats
+                current = float(row['Current_Price'])
+                predicted = float(row['Next_Day_Prediction'])
+                price_chg = float(row['Price_Change'])
+                chg_pct = float(row['Change_Pct'])
+                conf = float(row['Confidence'])
+                
+                print(f"{row['Ticker']:<10} "
+                     f"{row['Reference_Date']:<12} "  # ADDED
+                     f"{row['Model']:<10} "
+                     f"₹{current:<9.2f} "
+                     f"₹{predicted:<9.2f} "
+                     f"₹{price_chg:<9.2f} "
+                     f"{chg_pct:<7.2f}% "
+                     f"{row['Direction']:<9} "
+                     f"{conf:<9.1f}%")
+            except Exception as e:
+                print(f"{row['Ticker']:<10} Error formatting row: {e}")
         
         # Save portfolio summary
         portfolio_path = os.path.join(PATHS['results'], 'portfolio_next_day_predictions.csv')
