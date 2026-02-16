@@ -117,12 +117,12 @@ class ModelPredictor:
         """Download latest data for predictions
         
         NOTE: Call AFTER market close (3:30 PM IST)
-        At 4:00 PM IST: Today's closing price will be available
-        Downloads complete trading day data including today's close
+        At 4:00 PM IST: Today's closing price MUST be available
+        Forces yfinance to include today's close by using end_date=tomorrow
         """
         print(f"\n Downloading latest {days} days of data...")
         
-        end_date = datetime.now()
+        end_date = datetime.now() + timedelta(days=1)  # Include today + tomorrow for safety
         start_date = end_date - timedelta(days=days)
         
         self.data = yf.download(
@@ -131,6 +131,10 @@ class ModelPredictor:
             end=end_date.strftime("%Y-%m-%d"),
             progress=False
         ).dropna()
+        
+        if len(self.data) == 0:
+            print(f" WARNING: No data downloaded for {self.ticker}")
+            return self.data
         
         print(f" Downloaded {len(self.data)} trading days")
         print(f" Latest data date: {self.data.index[-1].strftime('%Y-%m-%d')}")
