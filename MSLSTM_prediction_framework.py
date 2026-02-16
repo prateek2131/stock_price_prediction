@@ -114,7 +114,12 @@ class ModelPredictor:
         print(f"\n Loaded {len(self.models)} models")
     
     def download_latest_data(self, days=365):
-        """Download latest data for predictions"""
+        """Download latest data for predictions
+        
+        NOTE: Call AFTER market close (3:30 PM IST)
+        At 4:00 PM IST: Today's closing price will be available
+        Downloads complete trading day data including today's close
+        """
         print(f"\n Downloading latest {days} days of data...")
         
         end_date = datetime.now()
@@ -128,6 +133,9 @@ class ModelPredictor:
         ).dropna()
         
         print(f" Downloaded {len(self.data)} trading days")
+        print(f" Latest data date: {self.data.index[-1].strftime('%Y-%m-%d')}")
+        print(f" Using TODAY'S CLOSING price: ₹{self.data['Close'].iloc[-1]:.2f}")
+        
         return self.data
     
     def generate_predictions(self, confidence_level=0.95):
@@ -189,7 +197,11 @@ class ModelPredictor:
                     confidence = max(0.0, min(1.0, float(confidence)))  # Ensure valid range
                 
                 # Ensure scalar values
+                # Get today's closing price (available after 3:30 PM IST, we run at 4:00 PM)
                 current_price = self.data['Close'].iloc[-1]
+                reference_date = self.data.index[-1].strftime('%Y-%m-%d')
+                price_source = "TODAY'S CLOSING PRICE"
+                
                 if hasattr(current_price, 'item'):
                     current_price = current_price.item()
                 elif hasattr(current_price, 'iloc'):
@@ -210,6 +222,8 @@ class ModelPredictor:
                 self.predictions[model_type] = {
                     'next_day_price': float(next_day_price),
                     'current_price': float(current_price),
+                    'reference_date': reference_date,  # Date/time of price used
+                    'price_source': price_source,  # Source of current price
                     'price_change': float(price_change),
                     'price_change_pct': float(price_change_pct),
                     'confidence': float(confidence),
