@@ -258,7 +258,7 @@ ENSEMBLE_CONFIG = {
 - **Evaluation Scope**: 40 stocks across 8 NSE sectors
 - **Historical Data**: Multi-year training with technical indicators
 - **Feature Engineering**: technical indicators (SMA, EMA, MACD, RSI, Bollinger Bands)
-- **Live Trading Period**: January 6-12, 2026 (23 consecutive trading days)
+- **Live Trading Period**: January 6- February 12, 2026 (23 consecutive trading days)
 - **Investment Strategy**: ₹25,000 daily investment per stock
 - **Performance Metrics**: RMSE, MAE, R², Directional Accuracy, Economic Returns
 
